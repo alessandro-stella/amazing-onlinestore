@@ -1,0 +1,51 @@
+.delete-account-page {
+    width: min(25em, 80%);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 1em;
+    margin: 2em;
+}
+
+.delete-account-page .MuiAlert-standardError,
+.delete-account-page .MuiAlert-standardInfo,
+.delete-account-page .MuiAlert-standardWarning,
+.delete-account-page .MuiAlert-standardSuccess {
+    margin-top: 1em;
+}
+
+.delete-account-page .logo-container {
+    height: 7.5em;
+}
+
+.delete-account-page .logo-container > svg {
+    height: 100%;
+}
+
+.delete-account-page .form-title {
+    width: 100%;
+
+    font-size: 2em;
+
+    font-weight: bold;
+}
+
+.delete-account-form {
+    width: 100%;
+    box-shadow: var(--bottom-shadow);
+    border-radius: 0.5em;
+    padding: 1.5em;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+}
+
+.delete-account-form .alert-message > * {
+    margin: 0;
+}

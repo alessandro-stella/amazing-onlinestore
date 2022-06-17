@@ -1,0 +1,118 @@
+.products-container {
+    height: fit-content;
+    flex: 1;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17.5em, 1fr));
+
+    gap: 1em;
+}
+
+.product-panel {
+    background-color: #fff;
+    border-radius: 0.5em;
+    box-shadow: var(--bottom-shadow);
+
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: 1em;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.product-panel:not(.disable-hover):hover,
+.product-panel:not(.disable-hover):active {
+    box-shadow: 0em 0em 0.7em 0.3em #ccc;
+}
+
+.product-panel .product-image {
+    height: 15em;
+    width: 100%;
+
+    background-image: linear-gradient(45deg, #ccc, #fff, #ccc);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+
+    border-radius: 0.25em;
+}
+
+.product-panel .product-name {
+    width: 100%;
+    margin: 0;
+    margin-top: 0.5em;
+
+    font-size: 1.25em;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.product-panel .product-price {
+    margin: 0.25em 0;
+
+    font-size: 2em;
+
+    display: flex;
+
+    line-height: 100%;
+}
+
+.product-panel .product-price__symbol {
+    height: min-content;
+    font-size: 0.5em;
+    line-height: 100%;
+    padding-top: 0.2em;
+}
+
+.product-panel .product-category {
+    margin-bottom: 1em;
+}
+
+.product-data {
+    margin-top: auto;
+    opacity: 0.7;
+}
+
+.restock-item {
+    margin-top: 2em;
+    margin-bottom: 0.5em;
+
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.75em;
+}
+
+.restock-item::before {
+    content: "";
+
+    background-color: #bbb;
+    width: 100%;
+    height: 1px;
+
+    position: absolute;
+    top: calc(-0.5em - 0.5px);
+    left: 0;
+}
+
+.restock-item__title {
+    font-size: 1.25em;
+}
+
+.products-container .alert-message {
+    margin-top: 0.5em;
+}
+
+.disable-hover {
+    cursor: initial;
+}

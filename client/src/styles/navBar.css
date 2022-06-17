@@ -1,0 +1,36 @@
+.navbar {
+    background-color: var(--dark-gray);
+    padding: 0.5em;
+
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+}
+
+/*----------
+Navbar logo
+----------*/
+
+.navbar-logo-container {
+    padding: 0.25em;
+    cursor: pointer;
+    height: 3em;
+    width: min-content;
+}
+
+.navbar-logo-container > svg {
+    height: 100%;
+}
+
+/*----------
+Search bar
+----------*/
+
+.search-bar {
+    flex: 1;
+    background-color: #fff;
+    border-radius: 0.25em;
+}

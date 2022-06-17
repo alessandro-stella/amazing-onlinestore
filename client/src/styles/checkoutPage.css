@@ -1,0 +1,153 @@
+.checkout-page {
+    flex: 1;
+    width: min(80em, 100%);
+    padding: 1em;
+}
+
+.checkout-page .title {
+    padding: 0;
+
+    margin-bottom: 0.5em;
+
+    position: relative;
+}
+
+.checkout-page .title::after {
+    background-color: #bbb;
+    width: 100%;
+    height: 1px;
+
+    content: "";
+    position: absolute;
+    bottom: calc(-0.25em + 0.5px);
+    left: 0;
+}
+
+.checkout-page__main {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 1.5em;
+}
+
+.checkout-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.checkout-section:not(.checkout-section-3) {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+
+    position: relative;
+}
+
+.checkout-section:not(.checkout-section-3)::after {
+    background-color: #bbb;
+    width: 100%;
+    height: 1px;
+
+    content: "";
+    position: absolute;
+    bottom: calc(-0.5em + 0.5px);
+    left: 0;
+}
+
+.checkout-section__title {
+    padding: 0.5em 0;
+
+    font-size: 1.25em;
+    font-weight: bold;
+
+    display: flex;
+    gap: 1em;
+
+    width: fit-content;
+}
+
+.checkout-section__data {
+    /* background-color: blueviolet; */
+}
+
+.products-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.side-section__pay {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+
+    padding: 1em;
+    border-radius: 0.5em;
+    box-shadow: var(--bottom-shadow);
+}
+
+.summary-subtext {
+    font-size: 1.25em;
+    font-weight: bold;
+    position: relative;
+    margin-top: 0.75em;
+}
+
+.summary-subtext::before {
+    background-color: #bbb;
+    width: 100%;
+    height: 1px;
+
+    content: "";
+    position: absolute;
+    top: calc(-0.5em + 0.5px);
+    left: 0;
+}
+
+.total {
+    font-size: 1.5em;
+    position: relative;
+
+    margin-top: calc(1em / 1.5);
+}
+
+.total::before {
+    background-color: #bbb;
+    width: 100%;
+    height: 1px;
+
+    content: "";
+    position: absolute;
+    top: calc(-0.5em + 0.5px);
+    left: 0;
+}
+
+.checkout-section-3 .alert-message {
+    margin-bottom: 0.5em;
+}
+
+.shipping-cost {
+    margin-top: 0.5em;
+}
+
+@media screen and (min-width: 900px) {
+    .checkout-page__main {
+        flex-direction: row;
+    }
+
+    .checkout-summary {
+        flex: 3;
+    }
+
+    .checkout-section:not(.checkout-section-3) {
+        flex-direction: row;
+    }
+
+    .side-section {
+        flex: 1;
+
+        height: fit-content;
+    }
+}

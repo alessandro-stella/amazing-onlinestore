@@ -1,0 +1,177 @@
+.user-page {
+    flex: 1;
+    width: min(70em, 100%);
+
+    padding: 1em;
+    padding-top: 0;
+}
+
+.select-section__container {
+    width: 100%;
+
+    padding: 1em 0;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(25em, 1fr));
+    gap: 1em;
+}
+
+.select-section {
+    flex: 1;
+    height: 100%;
+
+    max-width: calc(100vw - 2em);
+    padding: 1.5em;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+
+    border-radius: 0.25em;
+
+    box-shadow: var(--bottom-shadow);
+    transition: all 0.2s ease-in-out;
+
+    cursor: pointer;
+}
+
+.select-section:hover {
+    box-shadow: 0em 0em 0.7em 0.3em #ccc;
+}
+
+.select-section .icon-container {
+    background-color: var(--orange-light);
+
+    width: 4em;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    padding: 1em;
+}
+
+.fa-file-lines {
+    position: relative;
+    left: 1px;
+}
+
+.fa-bag-shopping,
+.fa-arrow-up-from-bracket {
+    position: relative;
+    bottom: 1px;
+}
+
+.section-text__container {
+    flex: 1;
+}
+
+.select-section .section-title {
+    font-size: 1.25em;
+    font-weight: bold;
+    margin-bottom: 0.25em;
+}
+
+.user-info__data {
+    flex: 1;
+
+    font-size: 1.25em;
+}
+
+.info-section {
+    font-size: 1.25em;
+    display: flex;
+    gap: 0.4em;
+
+    margin-bottom: 0.25em;
+}
+
+.info-section::before {
+    content: "";
+    width: 0.35em;
+    height: 0.35em;
+
+    background-color: var(--orange);
+
+    position: relative;
+    margin: auto 0;
+
+    border-radius: 50%;
+}
+
+.user-info__data .info-section:nth-last-child(2) {
+    margin-bottom: 0.5em;
+}
+
+.user-page .alert-message {
+    margin-top: 0.5em;
+}
+
+.uploading-product {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.product-preview__container {
+    flex: 1;
+
+    pointer-events: none;
+}
+
+.product-upload-form {
+    flex: 1;
+
+    box-shadow: var(--bottom-shadow);
+
+    border-radius: 0.5em;
+    padding: 1.5em;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+}
+
+.title {
+    padding: 0.5em 0;
+
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.smaller-button {
+    width: max(6em, 30%);
+
+    padding: 0.5em;
+}
+
+.user-page .section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.no-products {
+    margin: 0 1em;
+}
+
+.user-page .button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.user-page .button-group > * {
+    flex: 1;
+}
+
+@media screen and (min-width: 900px) {
+    .user-page .button-group {
+        flex-direction: row;
+    }
+}

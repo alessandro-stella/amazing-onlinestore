@@ -1,0 +1,33 @@
+.disclaimer-banner {
+    background-color: #fff;
+    position: fixed;
+    bottom: 0;
+
+    max-height: 70vh;
+    width: 100%;
+
+    overflow: hidden;
+    padding: 1em;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+
+    border-top: 1px solid #bbb;
+
+    z-index: 10;
+}
+
+.disclaimer-title {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.disclaimer-text {
+    overflow-y: auto;
+    height: calc(100% - 5em);
+}
+
+.disclaimer-text span {
+    font-weight: bold;
+}
