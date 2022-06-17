@@ -102,7 +102,7 @@ function shopPage() {
 
             <div className="shop-page">
                 <div className="select-category">
-                    <div className="title">NEGROOO</div>
+                    <div className="title">Filter by category</div>
 
                     <div className="section">
                         {isSmall ? (
