@@ -1,11 +1,11 @@
 import { useContext, useState } from "react";
-import siteContext from "../siteContext";
-import "../styles/changePassword.css";
+import siteContext from "../../siteContext";
+import "../../styles/changePassword.css";
 
 import { Button } from "@mui/material";
 import axios from "axios";
-import AlertMessage from "./AlertMessage";
-import InputField from "./InputField";
+import AlertMessage from "../AlertMessage";
+import InputField from "../InputField";
 
 function ChangeUsername({ userId }) {
     const { isSmall, setUsername } = useContext(siteContext);

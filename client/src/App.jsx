@@ -1,20 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
-import siteContext from "./siteContext";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import siteContext from "./siteContext";
 
-import LoginPage from "./pages/loginPage";
-import ForgotPasswordPage from "./pages/forgotPasswordPage";
-import ResetPasswordPage from "./pages/resetPasswordPage";
-import UserPage from "./pages/userPage";
-import DeleteAccountPage from "./pages/deleteAccountPage";
-import ShopPage from "./pages/shopPage";
+import DisclaimerBanner from "./components/DisclaimerBanner.jsx";
+import OrderHistory from "./components/userPage/OrderHistory";
+import UploadedProducts from "./components/userPage/UploadedProducts";
+import UploadProduct from "./components/userPage/UploadProduct";
+import UserInfo from "./components/userPage/UserInfo";
 import CartPage from "./pages/cartPage";
 import CheckoutPage from "./pages/checkoutPage";
-import ProductPage from "./pages/productPage";
-import SellerPage from "./pages/sellerPage";
+import DeleteAccountPage from "./pages/deleteAccountPage";
+import ForgotPasswordPage from "./pages/forgotPasswordPage";
+import LoginPage from "./pages/loginPage";
 import Page404 from "./pages/page404";
-import DisclaimerBanner from "./components/DisclaimerBanner.jsx";
+import ProductPage from "./pages/productPage";
+import ResetPasswordPage from "./pages/resetPasswordPage";
+import SellerPage from "./pages/sellerPage";
+import ShopPage from "./pages/shopPage";
+import UserPage from "./pages/userPage";
 
 /* Da rimuovere con il deploy finale */
 if (process.env.NODE_ENV === "development") {
@@ -132,7 +136,25 @@ function App() {
 
                 <Route path="shopPage" element={<ShopPage />} />
 
-                <Route path="userPage" element={<UserPage />} />
+                <Route path="userPage/*" element={<UserPage />} />
+
+                <Route path="userPage/userInfo" element={<UserInfo />} />
+                <Route
+                    path="userPage/orderHistory"
+                    element={<OrderHistory />}
+                />
+                {isSeller ? (
+                    <>
+                        <Route
+                            path="userPage/uploadProduct"
+                            element={<UploadProduct />}
+                        />
+                        <Route
+                            path="userPage/uploadedProducts"
+                            element={<UploadedProducts />}
+                        />
+                    </>
+                ) : null}
 
                 <Route
                     path="deleteAccountPage/:deleteAccountToken"
