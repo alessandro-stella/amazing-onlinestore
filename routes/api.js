@@ -780,6 +780,10 @@ router.post("/getCorrelatedProducts", async (req, res, next) => {
     for (const singleItemId of cartItems) {
         const itemCategory = await Product.findById(singleItemId);
 
+        if (!itemCategory) {
+            res.status(400).json({ msg: "products not found" });
+        }
+
         if (itemCategories.indexOf(itemCategory.category) === -1) {
             itemCategories.push(itemCategory.category);
         }
@@ -787,6 +791,10 @@ router.post("/getCorrelatedProducts", async (req, res, next) => {
 
     for (const singleCategory of itemCategories) {
         const allItems = await Product.find({ category: singleCategory });
+
+        if (!allItems) {
+            res.status(400).json({ msg: "products not found" });
+        }
 
         if (!allItems || allItems.length === 0) {
             return;

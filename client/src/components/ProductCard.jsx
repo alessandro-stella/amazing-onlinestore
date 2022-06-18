@@ -65,6 +65,10 @@ function ProductCard({ props }) {
             .catch((err) => setInStock("loadingError"));
     }
 
+    async function removeProduct() {
+        
+    }
+
     return (
         <div
             className={`product-panel${disableClick ? " disable-hover" : ""}`}
@@ -130,8 +134,9 @@ function ProductCard({ props }) {
                         <Button
                             fullWidth
                             variant="contained"
-                            size={isSmall ? "large" : "small"}>
-                            delete item
+                            size={isSmall ? "large" : "small"}
+                            onClick={()=>removeProduct()}>
+                            delete product
                         </Button>
                     </div>
                 </>

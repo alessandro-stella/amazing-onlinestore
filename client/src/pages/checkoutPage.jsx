@@ -363,11 +363,7 @@ function checkoutPage() {
                                             <FormControlLabel
                                                 control={
                                                     <Checkbox
-                                                        size={
-                                                            isSmall
-                                                                ? "large"
-                                                                : "medium"
-                                                        }
+                                                        size="small"
                                                         checked={fastShipping}
                                                         onChange={() =>
                                                             setFastShipping(

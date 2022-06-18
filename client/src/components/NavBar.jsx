@@ -36,9 +36,16 @@ function NavBar({ searchProducts }) {
         navigate(url);
     }
 
+    function mouseDownHandler(event, target) {
+        if (event.button === 1) {
+            window.open(`/${target}`, "_blank");
+        }
+    }
+
     return (
         <div className="navbar">
             <div
+                onMouseDown={(e) => mouseDownHandler(e, "shopPage")}
                 className="navbar-logo-container"
                 onClick={() => navigate("/shopPage")}>
                 {isMobile || isSmall ? <LogoSmall /> : <LogoBig />}
@@ -51,12 +58,14 @@ function NavBar({ searchProducts }) {
             />
 
             <IconButton
+                onMouseDown={(e) => mouseDownHandler(e, "userPage")}
                 color="whiteIcon"
                 onClick={() => checkUserLogged("/userPage")}>
                 <FontAwesomeIcon icon={faUser} />
             </IconButton>
 
             <IconButton
+                onMouseDown={(e) => mouseDownHandler(e, "cartPage")}
                 color="whiteIcon"
                 onClick={() => checkUserLogged("/cartPage")}>
                 <FontAwesomeIcon icon={faCartShopping} />
