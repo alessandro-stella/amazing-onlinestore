@@ -308,15 +308,63 @@ router.post("/deleteAccount/:deleteAccountToken", async (req, res, next) => {
     try {
         await User.findOneAndDelete({ deleteAccountToken });
 
-        await Product.deleteMany({
-            sellerUsername: userToDelete.username,
+        await Cart.findOneAndDelete({ userId: userToDelete._id });
+
+        await History.findOneAndDelete({
+            userId: userToDelete._id,
         });
 
         if (userToDelete.isSeller) {
-            await Cart.findOneAndDelete({ userId: userToDelete._id });
+            let sellerProducts = await Product.find({
+                sellerUsername: userToDelete.username,
+            });
 
-            await History.findOneAndDelete({
-                userId: userToDelete._id,
+            sellerProducts = sellerProducts.map((singleProducts) =>
+                singleProducts._id.toString()
+            );
+
+            let allCarts = await Cart.find({});
+            allCarts = allCarts.filter(
+                (singleCart) => singleCart.items.length !== 0
+            );
+
+            allCarts.forEach((singleCart) => {
+                let newItems = [];
+
+                singleCart.items.forEach((singleItem) => {
+                    if (!sellerProducts.includes(singleItem.productId)) {
+                        newItems.push(singleItem);
+                    }
+                });
+
+                if (singleCart.items.length !== newItems.length) {
+                    singleCart.items = newItems;
+                    singleCart.save();
+                }
+            });
+
+            let allHistories = await History.find({});
+            allHistories = allHistories.filter(
+                (singleHistory) => singleHistory.orders.length !== 0
+            );
+
+            allHistories.forEach((singleHistory) => {
+                let newItems = [];
+
+                singleHistory.orders.forEach((singleOrder) => {
+                    if (sellerProducts.includes(singleOrder.productId)) {
+                        singleOrder.productId = "deleted-item";
+                    }
+
+                    newItems.push(singleOrder);
+                });
+
+                singleHistory.orders = newItems;
+                singleHistory.save();
+            });
+
+            await Product.deleteMany({
+                sellerUsername: userToDelete.username,
             });
         }
 
@@ -1050,7 +1098,7 @@ router.post("/updateItemQuantity", (req, res, next) => {
         .catch((err) => res.status(400).json({ msg: "cart not found" }));
 });
 
-router.post("/removeItemFromCart", (req, res, next) => {
+router.post("/removeItemFromCart", async (req, res, next) => {
     const { userId, productId } = req.body;
 
     const user = User.findById(userId);
@@ -1059,37 +1107,32 @@ router.post("/removeItemFromCart", (req, res, next) => {
         return res.status(400).json({ msg: "user not found" });
     }
 
-    Cart.findOne({ userId })
-        .then((cart) => {
-            if (
-                !cart.items.find(
-                    (singleItem) => singleItem.productId === productId
-                )
-            ) {
-                return res.status(400).json({ msg: "item not found in cart" });
-            }
+    const userCart = await Cart.findOne({ userId });
 
-            let updatedItems = cart.items.filter(
-                (singleItem) => singleItem.productId !== productId
-            );
+    if (!userCart) {
+        return res.status(400).json({ msg: "cart not found" });
+    }
 
-            Cart.findOneAndUpdate(
-                { userId },
-                { items: updatedItems },
-                (err, user) => {
-                    if (err) {
-                        res.status(400).json({
-                            msg: "cart not found or not updated",
-                        });
-                    }
+    try {
+        if (
+            !userCart.items.find(
+                (singleItem) => singleItem.productId === productId
+            )
+        ) {
+            return res.status(400).json({ msg: "product not found in cart" });
+        }
 
-                    return res
-                        .status(200)
-                        .json({ msg: "item removed", updatedItems });
-                }
-            );
-        })
-        .catch((err) => res.status(400).json({ msg: "cart not found" }));
+        let updatedItems = userCart.items.filter(
+            (singleItem) => singleItem.productId !== productId
+        );
+
+        res.status(200).json({
+            msg: "product removed",
+            updatedItems,
+        });
+    } catch (err) {
+        return res.status(400).json({ msg: "error during product remotion" });
+    }
 });
 
 router.post("/removeSinglePurchases", (req, res, next) => {

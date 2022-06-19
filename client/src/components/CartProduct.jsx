@@ -77,7 +77,7 @@ export function CartProduct({
                 getProductData();
 
                 if (hasLoaded) {
-                    updateTotal();
+                    updateTotal(quantityToBuy);
                 }
 
                 setHasLoaded((hasLoaded) => (hasLoaded = true));

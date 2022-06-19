@@ -15,7 +15,7 @@ import "../styles/checkoutPage.css";
 function checkoutPage() {
     const navigate = useNavigate();
 
-    const { userId, isSmall } = useContext(siteContext);
+    const { userId } = useContext(siteContext);
 
     const [productsToBuy, setProductsToBuy] = useState("Loading...");
     const [singleCheckout, setSingleCheckout] = useState(false);
@@ -143,7 +143,7 @@ function checkoutPage() {
         removeItems();
     }
 
-    function updateTotal() {
+    function updateTotal(newQuantity) {
         setTotal("Loading...");
 
         const updateTotal = async () => {
@@ -156,7 +156,16 @@ function checkoutPage() {
         const getProductData = async () => {
             await axios
                 .post("/getProductById", { productId: productsToBuy.productId })
-                .then((res) => setTotal(formatPrice(res.data.product.price)))
+                .then((res) => {
+                    setTotal(
+                        formatPrice(
+                            +res.data.product.price *
+                                (newQuantity
+                                    ? newQuantity
+                                    : productsToBuy.quantityToBuy)
+                        )
+                    );
+                })
                 .catch((err) => setTotalError(true));
         };
 
@@ -195,8 +204,13 @@ function checkoutPage() {
     }
 
     function removeItem(itemToRemove) {
+        if (singleCheckout) {
+            navigate("/shopPage");
+            return;
+        }
+
         const removeFromCart = async () => {
-            axios
+            await axios
                 .post("/removeItemFromCart", {
                     userId,
                     productId: itemToRemove,
@@ -213,6 +227,10 @@ function checkoutPage() {
         };
 
         removeFromCart();
+    }
+
+    function orderProducts() {
+        console.log(productsToBuy);
     }
 
     return (
@@ -324,7 +342,10 @@ function checkoutPage() {
                                 fullWidth
                                 size="large"
                                 variant="contained"
-                                color="yellowButton">
+                                color="yellowButton"
+                                onClick={() => {
+                                    orderProducts();
+                                }}>
                                 buy now
                             </Button>
 

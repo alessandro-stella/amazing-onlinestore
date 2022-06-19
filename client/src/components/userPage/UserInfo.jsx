@@ -50,18 +50,20 @@ function UserInfo() {
         } else {
             if (userId.length <= 24) {
                 startTransition(() => {
-                    axios
-                        .post("/getSellerProducts", {
-                            sellerUsername: username,
-                        })
-                        .then((res) => {
-                            setProductsUploaded(res.data.products.length);
-                        })
-                        .catch((err) =>
-                            setProductsError(
-                                "There's been an error during the process, please try again later"
-                            )
-                        );
+                    if (isSeller === true) {
+                        axios
+                            .post("/getSellerProducts", {
+                                sellerUsername: username,
+                            })
+                            .then((res) => {
+                                setProductsUploaded(res.data.products.length);
+                            })
+                            .catch((err) =>
+                                setProductsError(
+                                    "There's been an error during the process, please try again later"
+                                )
+                            );
+                    }
 
                     axios
                         .post("/getUserSince", { userId })
@@ -102,16 +104,20 @@ function UserInfo() {
     }
 
     async function goToDeleteAccount() {
-        await axios
-            .post("/getDeleteAccountToken", { userId })
-            .then((res) =>
-                navigate(`/deleteAccountPage/${res.data.deleteAccountToken}`)
-            )
-            .catch((err) =>
-                setNavigateToDeleteError(
-                    "There's been an error during the process, please try again later"
+        if (userId.length <= 24) {
+            await axios
+                .post("/getDeleteAccountToken", { userId })
+                .then((res) =>
+                    navigate(
+                        `/deleteAccountPage/${res.data.deleteAccountToken}`
+                    )
                 )
-            );
+                .catch((err) =>
+                    setNavigateToDeleteError(
+                        "There's been an error during the process, please try again later"
+                    )
+                );
+        }
     }
 
     return (

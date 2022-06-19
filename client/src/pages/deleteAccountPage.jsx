@@ -1,15 +1,19 @@
 import { Button } from "@mui/material";
 import axios from "axios";
+import { useContext } from "react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AlertMessage from "../components/AlertMessage";
 import InputField from "../components/InputField";
 
 import LogoBlack from "../logo/logo-black.svg?component";
+import siteContext from "../siteContext";
 import "../styles/deleteAccountPage.css";
 
 function deleteAccountPage() {
     const navigate = useNavigate();
+    const { setUsername, setUserId, setIsSeller, setSearchKeyword } =
+        useContext(siteContext);
     const { deleteAccountToken } = useParams();
 
     const [confirmWord, setConfirmWord] = useState("");
@@ -20,7 +24,7 @@ function deleteAccountPage() {
     }, []);
 
     async function deleteAccount() {
-        if (confirmWord !== "DELETE ACCOUNT") {
+        if (confirmWord !== "DELETE-ACCOUNT") {
             setAlertMessage("Wrong confirmation word");
             resetAlert();
             return;
@@ -30,7 +34,13 @@ function deleteAccountPage() {
             .post(`/deleteAccount/${deleteAccountToken}`)
             .then((res) => {
                 setAlertMessage("Account deleted successfully");
+
                 localStorage.removeItem("userId");
+
+                setUsername("");
+                setUserId("");
+                setIsSeller("");
+                setSearchKeyword("");
             })
             .catch((err) => {
                 setAlertMessage(
@@ -58,8 +68,8 @@ function deleteAccountPage() {
 
                 <div className="delete-account-form__message">
                     We are really sorry that you want to delete your account. If
-                    you are sure of your choice, as a confirmation word, write "
-                    <strong>DELETE ACCOUNT</strong>"
+                    you are sure of your choice, as a confirmation word, write{" "}
+                    <br /> "<strong>DELETE-ACCOUNT</strong>"
                 </div>
 
                 <InputField
@@ -88,7 +98,7 @@ function deleteAccountPage() {
                             ? "contained"
                             : "outlined"
                     }
-                    onClick={() => navigate("/shopPage")}>
+                    onClick={() => navigate("/loginPage")}>
                     go back
                 </Button>
             </form>
