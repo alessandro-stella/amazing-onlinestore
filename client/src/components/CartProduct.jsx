@@ -162,14 +162,16 @@ export function CartProduct({
                             <>
                                 <Alert
                                     severity="info"
-                                    className="alert-not-rounded">
+                                    className="alert-not-rounded"
+                                    >
                                     <strong>Confirm</strong> - Are you sure you
                                     want to remove this item?
                                 </Alert>
                                 <ButtonGroup
                                     className="button-group"
                                     fullWidth
-                                    color="info">
+                                    color="info"
+                                    size="large">
                                     <Button
                                         onClick={() => removeItem(productId)}>
                                         Confirm

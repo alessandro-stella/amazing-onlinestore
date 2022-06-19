@@ -136,25 +136,24 @@ function App() {
 
                 <Route path="shopPage" element={<ShopPage />} />
 
-                <Route path="userPage/*" element={<UserPage />} />
+                <Route path="userPage" element={<UserPage />} />
 
                 <Route path="userPage/userInfo" element={<UserInfo />} />
+
                 <Route
                     path="userPage/orderHistory"
                     element={<OrderHistory />}
                 />
-                {isSeller ? (
-                    <>
-                        <Route
-                            path="userPage/uploadProduct"
-                            element={<UploadProduct />}
-                        />
-                        <Route
-                            path="userPage/uploadedProducts"
-                            element={<UploadedProducts />}
-                        />
-                    </>
-                ) : null}
+
+                <Route
+                    path="userPage/uploadProduct"
+                    element={<UploadProduct />}
+                />
+
+                <Route
+                    path="userPage/uploadedProducts"
+                    element={<UploadedProducts />}
+                />
 
                 <Route
                     path="deleteAccountPage/:deleteAccountToken"

@@ -116,3 +116,7 @@
 .disable-hover {
     cursor: initial;
 }
+
+.delete-item-alert {
+    margin-top: 0.5em;
+}

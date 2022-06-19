@@ -341,6 +341,92 @@ router.post("/uploadProduct", (req, res, next) => {
         );
 });
 
+router.post("/deleteProduct", (req, res, next) => {
+    const { userId, productId } = req.body;
+
+    const user = User.findById(userId);
+
+    if (!user) {
+        return res.status(400).json({ msg: "user not found" });
+    }
+
+    Product.findById(productId)
+        .then((product) => {
+            Product.deleteOne({ _id: productId }, (err) => {
+                if (err) {
+                    return res
+                        .status(400)
+                        .json({ msg: "error while deleting a product" });
+                }
+
+                Cart.find({})
+                    .then((carts) => {
+                        carts.forEach((singleCart) => {
+                            if (singleCart.items.length === 0) {
+                                return;
+                            }
+
+                            let newItems = [];
+
+                            singleCart.items.forEach((singleOrder) => {
+                                if (singleOrder.productId !== productId) {
+                                    newItems.push(singleOrder);
+                                }
+                            });
+
+                            if (newItems.length !== singleCart.items.length) {
+                                singleCart.items = newItems;
+                                singleCart.save();
+                            }
+                        });
+
+                        History.find({})
+                            .then((histories) => {
+                                histories.forEach((singleHistory) => {
+                                    if (singleHistory.orders.length === 0) {
+                                        return;
+                                    }
+
+                                    let newOrders = [];
+
+                                    singleHistory.orders.forEach(
+                                        (singleOrder) => {
+                                            if (
+                                                singleOrder.productId !==
+                                                productId
+                                            ) {
+                                                newOrders.push(singleOrder);
+                                            }
+                                        }
+                                    );
+
+                                    if (
+                                        newOrders.length !==
+                                        singleHistory.orders.length
+                                    ) {
+                                        singleHistory.orders = newOrders;
+                                        singleHistory.save();
+                                    }
+                                });
+
+                                return res
+                                    .status(200)
+                                    .json({ msg: "item deleted successfully" });
+                            })
+                            .catch((err) =>
+                                res
+                                    .status(200)
+                                    .json({ msg: "error during history fetch" })
+                            );
+                    })
+                    .catch((err) =>
+                        res.status(200).json({ msg: "error during cart fetch" })
+                    );
+            });
+        })
+        .catch((err) => res.status(400).json({ msg: "product not found" }));
+});
+
 router.post("/updateItemStock", (req, res, next) => {
     const productId = req.body.productId;
 

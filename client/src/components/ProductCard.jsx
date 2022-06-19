@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Alert, Button, ButtonGroup } from "@mui/material";
 import axios from "axios";
 import { useEffect } from "react";
 import { useContext, useState } from "react";
@@ -21,11 +21,14 @@ function ProductCard({ props }) {
         sellerUsername,
         isSeller,
         disableClick,
+        getProducts,
     } = props;
 
     const [inStock, setInStock] = useState(props.inStock);
     const [newQuantity, setNewQuantity] = useState(props.inStock);
     const [hasChanged, setHasChanged] = useState(false);
+    const [confirmRemove, setConfirmRemove] = useState(false);
+    const [displayError, setDisplayError] = useState(false);
 
     function handleNewQuantity(value) {
         if (newQuantity < 0 || isNaN(newQuantity)) {
@@ -66,7 +69,32 @@ function ProductCard({ props }) {
     }
 
     async function removeProduct() {
-        
+        setConfirmRemove(true);
+    }
+
+    function deleteItem(itemToRemove) {
+        const removeFromCart = async () => {
+            axios
+                .post("/deleteProduct", {
+                    productId: itemToRemove,
+                })
+                .then((res) => {
+                    getProducts();
+                })
+                .catch((err) => {
+                    console.dir(err);
+                    setDisplayError(true);
+                    resetAlert();
+                });
+        };
+
+        removeFromCart();
+    }
+
+    function resetAlert() {
+        setTimeout(() => {
+            setDisplayError(false);
+        }, 2500);
     }
 
     return (
@@ -135,9 +163,43 @@ function ProductCard({ props }) {
                             fullWidth
                             variant="contained"
                             size={isSmall ? "large" : "small"}
-                            onClick={()=>removeProduct()}>
+                            onClick={() => removeProduct()}>
                             delete product
                         </Button>
+
+                        {confirmRemove && (
+                            <>
+                                <Alert
+                                    severity="info"
+                                    className="alert-not-rounded delete-item-alert">
+                                    <strong>Confirm</strong> - Are you sure you
+                                    want to remove this item?
+                                </Alert>
+                                <ButtonGroup
+                                    fullWidth
+                                    color="info"
+                                    size="large">
+                                    <Button
+                                        className="no-round-top-left"
+                                        onClick={() => deleteItem(productId)}>
+                                        Confirm
+                                    </Button>
+                                    <Button
+                                        className="no-round-top-right"
+                                        variant="contained"
+                                        onClick={() => setConfirmRemove(false)}>
+                                        Undo
+                                    </Button>
+                                </ButtonGroup>
+
+                                {displayError && (
+                                    <AlertMessage
+                                        className="alert-message"
+                                        alertMessage="There's been an error during the process, please try again"
+                                    />
+                                )}
+                            </>
+                        )}
                     </div>
                 </>
             )}

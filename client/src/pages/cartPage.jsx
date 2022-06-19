@@ -80,9 +80,13 @@ function cartPage() {
                 .post("/getCorrelatedProducts", {
                     items: items.map((singleItem) => singleItem.productId),
                 })
-                .then((res) =>
-                    setCorrelatedProducts(res.data.correlatedProducts)
-                )
+                .then((res) => {
+                    let tempCorrelated = res.data.correlatedProducts.filter(
+                        (singleCorrelated) => singleCorrelated != null
+                    );
+
+                    setCorrelatedProducts(tempCorrelated);
+                })
                 .catch((err) => setDisplayError(true));
         };
 

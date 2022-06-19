@@ -30,7 +30,7 @@ function UploadProduct() {
             return;
         }
 
-        if (!isSeller) {
+        if (isSeller !== "" && !isSeller) {
             navigate("/userPage");
             return;
         }

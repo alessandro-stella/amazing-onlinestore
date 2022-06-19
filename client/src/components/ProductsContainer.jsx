@@ -5,6 +5,7 @@ import ProductCard from "./ProductCard";
 function ProductsContainer({
     products,
     categoryFilter,
+    getProducts,
     isSeller,
     disableClick,
 }) {
@@ -43,11 +44,7 @@ function ProductsContainer({
 
     useEffect(() => {
         filterProducts();
-    }, [products]);
-
-    useEffect(() => {
-        filterProducts();
-    }, [categoryFilter]);
+    }, [products, categoryFilter]);
 
     return (
         <div className="products-container">
@@ -60,7 +57,12 @@ function ProductsContainer({
                     {filteredProducts.map((singleProduct) => (
                         <ProductCard
                             key={singleProduct._id}
-                            props={{ ...singleProduct, isSeller, disableClick }}
+                            props={{
+                                ...singleProduct,
+                                isSeller,
+                                disableClick,
+                                getProducts,
+                            }}
                         />
                     ))}
                 </>

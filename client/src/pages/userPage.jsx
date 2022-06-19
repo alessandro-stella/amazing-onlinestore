@@ -3,18 +3,8 @@ import { startTransition, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import siteContext from "../siteContext";
 
-import InputField from "../components/InputField";
 import NavBar from "../components/NavBar";
-import ProductCard from "../components/ProductCard";
-import ProductsContainer from "../components/ProductsContainer";
 import "../styles/userPage.css";
-
-import { Button, TextField } from "@mui/material";
-import AlertMessage from "../components/AlertMessage";
-import ChangeUsername from "../components/userPage/ChangeUsername";
-import LoadingData from "../components/LoadingData";
-import SelectCategory from "../components/SelectCategory";
-import ChangePassword from "../components/userPage/ChangePassword";
 
 import {
     faArrowUpFromBracket as uploadIcon,
@@ -28,13 +18,8 @@ import SiteInfo from "../components/SiteInfo";
 function userPage() {
     const navigate = useNavigate();
 
-    const { username, userId, isSeller, setSearchKeyword, isSmall } =
+    const { username, userId, isSeller, setSearchKeyword } =
         useContext(siteContext);
-
-    const [products, setProducts] = useState("loading");
-    const [purchases, setPurchases] = useState("Loading...");
-
-    const [alertMessage, setAlertMessage] = useState("");
 
     useEffect(() => {
         if (!userId) {
@@ -45,25 +30,6 @@ function userPage() {
         document.title = "Amazing - Personal Page";
         setSearchKeyword("");
     }, []);
-
-    useEffect(() => {
-        if (!userId) {
-            navigate("/loginPage");
-        } else {
-            if (userId.length <= 24) {
-                startTransition(() => {
-                    axios
-                        .post("/getSellerProducts", {
-                            sellerUsername: username,
-                        })
-                        .then((res) => {
-                            setProducts(res.data.products);
-                        })
-                        .catch((err) => console.log(err));
-                });
-            }
-        }
-    }, [userId]);
 
     function navigateTo(page) {
         window.location = `/userPage/${page}`;
@@ -173,66 +139,6 @@ function userPage() {
                     </div>
 
                     <SiteInfo />
-
-                    <>
-                        <div className="section">
-                            <div className="title">Your products</div>
-
-                            {products.length > 0 ? (
-                                <Button
-                                    size={isSmall ? "large" : "small"}
-                                    style={{ minWidth: "30%" }}
-                                    variant="contained"
-                                    onClick={() => setSelectedSection("")}>
-                                    go back
-                                </Button>
-                            ) : null}
-                        </div>
-
-                        {products === "loading" ? (
-                            <LoadingData />
-                        ) : (
-                            <>
-                                {products.length > 0 ? (
-                                    <>
-                                        <ProductsContainer
-                                            products={products}
-                                            isSeller={true}
-                                            disableClick={true}
-                                        />
-                                    </>
-                                ) : (
-                                    <div className="no-products">
-                                        You don't have any products uploaded
-                                    </div>
-                                )}
-                            </>
-                        )}
-                    </>
-
-                    <>
-                        <div>order history</div>
-
-                        {purchases === "Loading..." ? (
-                            <LoadingData />
-                        ) : (
-                            <>
-                                {purchases.length === 0 ? (
-                                    <h1>No purchases</h1>
-                                ) : (
-                                    <h1>{purchases.length}</h1>
-                                )}
-                            </>
-                        )}
-
-                        <Button
-                            size={isSmall ? "large" : "small"}
-                            style={{ minWidth: "30%" }}
-                            variant="contained"
-                            onClick={() => setSelectedSection("")}>
-                            go back
-                        </Button>
-                    </>
                 </>
             </div>
         </>
