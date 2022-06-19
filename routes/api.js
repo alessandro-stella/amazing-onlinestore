@@ -1101,38 +1101,28 @@ router.post("/updateItemQuantity", (req, res, next) => {
 router.post("/removeItemFromCart", async (req, res, next) => {
     const { userId, productId } = req.body;
 
-    const user = User.findById(userId);
-
-    if (!user) {
-        return res.status(400).json({ msg: "user not found" });
-    }
-
     const userCart = await Cart.findOne({ userId });
 
     if (!userCart) {
         return res.status(400).json({ msg: "cart not found" });
     }
 
-    try {
-        if (
-            !userCart.items.find(
-                (singleItem) => singleItem.productId === productId
-            )
-        ) {
-            return res.status(400).json({ msg: "product not found in cart" });
-        }
+    let newItems = userCart.items.filter(
+        (singleItem) => singleItem.productId !== productId
+    );
 
-        let updatedItems = userCart.items.filter(
-            (singleItem) => singleItem.productId !== productId
+    Cart.findOneAndUpdate({ _id: userCart._id }, { items: newItems }, { new: true })
+        .then((newCart) => {
+            console.log(newCart);
+
+            return res.status(200).json({
+                msg: "product removed successfully",
+                updatedItems: newCart.items,
+            });
+        })
+        .catch((err) =>
+            res.status(400).json({ msg: "error during item remotion" })
         );
-
-        res.status(200).json({
-            msg: "product removed",
-            updatedItems,
-        });
-    } catch (err) {
-        return res.status(400).json({ msg: "error during product remotion" });
-    }
 });
 
 router.post("/removeSinglePurchases", (req, res, next) => {
@@ -1153,7 +1143,7 @@ router.post("/removeSinglePurchases", (req, res, next) => {
             Cart.findOneAndUpdate(
                 { userId },
                 { items: updatedItems },
-                (err, user) => {
+                (err, cart) => {
                     if (err) {
                         res.status(400).json({
                             msg: "cart not found or not updated",
