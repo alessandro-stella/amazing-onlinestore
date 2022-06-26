@@ -36,7 +36,7 @@ function forgotPasswordPage() {
         }
 
         axios
-            .post("/sendResetEmail", {
+            .post("/user/sendResetEmail", {
                 userEmail: email,
             })
             .then(() => {

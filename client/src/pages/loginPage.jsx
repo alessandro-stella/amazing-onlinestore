@@ -71,7 +71,7 @@ function loginPage() {
 
         const getUserData = async (e) => {
             axios
-                .post("/login", {
+                .post("/auth/login", {
                     email,
                     password,
                 })
@@ -152,7 +152,7 @@ function loginPage() {
             };
 
             axios
-                .post("/register", newUser)
+                .post("/auth/register", newUser)
                 .then((res) => {
                     saveUserData(res.data);
                     sendWelcomeEmail(
@@ -184,7 +184,7 @@ function loginPage() {
 
         const encryptUserId = async () => {
             axios
-                .post("/encryptUserId", { userId })
+                .post("/user/encryptUserId", { userId })
                 .then((res) => {
                     localStorage.setItem("userId", res.data.encryptedId);
                 })
@@ -205,7 +205,7 @@ function loginPage() {
     }
 
     function sendWelcomeEmail(username, userEmail, deleteAccountToken) {
-        axios.post("/sendWelcomeEmail", {
+        axios.post("/auth/sendWelcomeEmail", {
             username,
             userEmail,
             deleteAccountToken,

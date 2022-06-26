@@ -61,7 +61,7 @@ function shopPage() {
 
         if (searchKeyword === "") {
             axios
-                .post("/getAllProducts")
+                .post("/product/getAllProducts")
                 .then((res) => {
                     orderProducts(res.data.products);
                 })
@@ -73,7 +73,7 @@ function shopPage() {
                 });
         } else {
             axios
-                .post("/getProductsByName", { keyword: searchKeyword })
+                .post("/product/getProductsByName", { keyword: searchKeyword })
                 .then((res) => {
                     orderProducts(res.data.products);
                 })

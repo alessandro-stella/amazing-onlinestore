@@ -2,9 +2,9 @@ import { Button } from "@mui/material";
 import axios from "axios";
 import { startTransition, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import siteContext from "../../siteContext";
-import AlertMessage from "../AlertMessage";
-import NavBar from "../NavBar";
+import siteContext from "../siteContext";
+import AlertMessage from "./AlertMessage";
+import NavBar from "./NavBar";
 import ChangePassword from "./ChangePassword";
 import ChangeUsername from "./ChangeUsername";
 
@@ -52,7 +52,7 @@ function UserInfo() {
                 startTransition(() => {
                     if (isSeller === true) {
                         axios
-                            .post("/getSellerProducts", {
+                            .post("/product/getSellerProducts", {
                                 sellerUsername: username,
                             })
                             .then((res) => {
@@ -66,7 +66,7 @@ function UserInfo() {
                     }
 
                     axios
-                        .post("/getUserSince", { userId })
+                        .post("/user/getUserSince", { userId })
                         .then((res) => {
                             setUserSince(res.data.userSince);
                         })
@@ -77,7 +77,7 @@ function UserInfo() {
                         );
 
                     axios
-                        .post("/getUserOrders", { userId })
+                        .post("/history/getUserOrders", { userId })
                         .then((res) => {
                             setPurchases(res.data.orders);
                         })
@@ -106,7 +106,7 @@ function UserInfo() {
     async function goToDeleteAccount() {
         if (userId.length <= 24) {
             await axios
-                .post("/getDeleteAccountToken", { userId })
+                .post("/user/getDeleteAccountToken", { userId })
                 .then((res) =>
                     navigate(
                         `/deleteAccountPage/${res.data.deleteAccountToken}`

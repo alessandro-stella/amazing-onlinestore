@@ -31,7 +31,7 @@ function deleteAccountPage() {
         }
 
         await axios
-            .post(`/deleteAccount/${deleteAccountToken}`)
+            .post(`/user/deleteAccount/${deleteAccountToken}`)
             .then((res) => {
                 setAlertMessage("Account deleted successfully");
 

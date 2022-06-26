@@ -59,7 +59,7 @@ function ProductCard({ props }) {
 
     async function updateQuantity() {
         await axios
-            .post("/updateItemStock", { productId, newQuantity })
+            .post("/product/updateItemStock", { productId, newQuantity })
             .then((res) => {
                 setInStock(res.data.newQuantity);
                 setNewQuantity(res.data.newQuantity);
@@ -75,7 +75,7 @@ function ProductCard({ props }) {
     function deleteItem(itemToRemove) {
         const removeFromCart = async () => {
             axios
-                .post("/deleteProduct", {
+                .post("/product/deleteProduct", {
                     productId: itemToRemove,
                 })
                 .then((res) => {

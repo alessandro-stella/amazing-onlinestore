@@ -1,4 +1,4 @@
-import { Button, Checkbox, FormControlLabel } from "@mui/material";
+import { Alert, Button, Checkbox, FormControlLabel } from "@mui/material";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -120,7 +120,7 @@ function checkoutPage() {
         let items;
 
         await axios
-            .post("/getUserCart", { userId })
+            .post("/cart/getUserCart", { userId })
             .then((res) => {
                 items = res.data.items;
             })
@@ -132,7 +132,7 @@ function checkoutPage() {
     function removeSingleCheckout(updatedItems) {
         const removeItems = async () => {
             await axios
-                .post("/updateCartProducts", { userId, updatedItems })
+                .post("/cart/updateCartProducts", { userId, updatedItems })
                 .catch((err) =>
                     setAlertMessage(
                         "There's been an error during the process, please try again"
@@ -148,14 +148,16 @@ function checkoutPage() {
 
         const updateTotal = async () => {
             await axios
-                .post("/getCartTotal", { userId })
+                .post("/cart/getCartTotal", { userId })
                 .then((res) => setTotal(formatPrice(res.data.totalPrice)))
                 .catch((err) => setTotalError(true));
         };
 
         const getProductData = async () => {
             await axios
-                .post("/getProductById", { productId: productsToBuy.productId })
+                .post("/product/getProductById", {
+                    productId: productsToBuy.productId,
+                })
                 .then((res) => {
                     setTotal(
                         formatPrice(
@@ -211,7 +213,7 @@ function checkoutPage() {
 
         const removeFromCart = async () => {
             await axios
-                .post("/removeItemFromCart", {
+                .post("/cart/removeItemFromCart", {
                     userId,
                     productId: itemToRemove,
                 })
@@ -229,7 +231,7 @@ function checkoutPage() {
         removeFromCart();
     }
 
-    function orderProducts() {
+    function buyProducts() {
         console.log(productsToBuy);
     }
 
@@ -253,33 +255,42 @@ function checkoutPage() {
                 <div className="checkout-page__main">
                     <div className="checkout-summary">
                         <div className="checkout-section checkout-section-1">
-                            <div className="checkout-section__title">
-                                <div className="checkout-section__title-number">
-                                    1
+                            <div className="checkout-section__inner">
+                                <div className="checkout-section__title">
+                                    <div className="checkout-section__title-number">
+                                        1
+                                    </div>
+                                    <div className="checkout-section__title-text">
+                                        Delivery address
+                                    </div>
                                 </div>
-                                <div className="checkout-section__title-text">
-                                    Delivery address
-                                </div>
-                            </div>
 
-                            <div className="checkout-section__data">
-                                <ShipmentAddress />
+                                <div className="checkout-section__data">
+                                    <ShipmentAddress />
+                                </div>
                             </div>
                         </div>
 
                         <div className="checkout-section checkout-section-2">
-                            <div className="checkout-section__title">
-                                <div className="checkout-section__title-number">
-                                    2
+                            <div className="checkout-section__inner">
+                                <div className="checkout-section__title">
+                                    <div className="checkout-section__title-number">
+                                        2
+                                    </div>
+                                    <div className="checkout-section__title-text">
+                                        Terms of payment
+                                    </div>
                                 </div>
-                                <div className="checkout-section__title-text">
-                                    Terms of payment
+                                <div className="checkout-section__data">
+                                    <PaymentMethods />
                                 </div>
                             </div>
 
-                            <div className="checkout-section__data">
-                                <PaymentMethods />
-                            </div>
+                            <Alert severity="info">
+                                <strong>Info</strong> - This feature is
+                                currently for decorative purposes only, a
+                                payment system may be implemented in the future
+                            </Alert>
                         </div>
 
                         <div className="checkout-section checkout-section-3">
@@ -344,7 +355,7 @@ function checkoutPage() {
                                 variant="contained"
                                 color="yellowButton"
                                 onClick={() => {
-                                    orderProducts();
+                                    buyProducts();
                                 }}>
                                 buy now
                             </Button>

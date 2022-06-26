@@ -27,7 +27,7 @@ function productPage() {
     useEffect(() => {
         const getProductData = async () => {
             axios
-                .post("/getProductById", { productId })
+                .post("/product/getProductById", { productId })
                 .then((res) => {
                     setProductData(res.data.product);
 
@@ -45,7 +45,7 @@ function productPage() {
 
         const getProductsByCategory = async (category, currentProductId) => {
             axios
-                .post("/getProductsByCategory", {
+                .post("/product/getProductsByCategory", {
                     category,
                 })
                 .then((res) => {
@@ -91,10 +91,10 @@ function productPage() {
         let items;
 
         await axios
-            .post("/removeSinglePurchases", { userId })
+            .post("/cart/removeSinglePurchases", { userId })
             .then(async (res) => {
                 await axios
-                    .post("/getUserCart", { userId })
+                    .post("/cart/getUserCart", { userId })
                     .then((cartItems) => (items = cartItems.data.items))
                     .catch((err) => {
                         setAlertMessage(
@@ -111,7 +111,7 @@ function productPage() {
         items.push(newItem);
 
         await axios
-            .post("/updateCartProducts", { userId, updatedItems: items })
+            .post("/cart/updateCartProducts", { userId, updatedItems: items })
             .then((cartItems) => {
                 navigate(`/checkoutPage`);
             })
@@ -136,7 +136,7 @@ function productPage() {
         let items;
 
         await axios
-            .post("/getUserCart", { userId })
+            .post("/cart/getUserCart", { userId })
             .then((cartItems) => (items = cartItems.data.items))
             .catch((err) => {
                 setAlertMessage(
@@ -162,7 +162,7 @@ function productPage() {
         }
 
         await axios
-            .post("/updateCartProducts", { userId, updatedItems: items })
+            .post("/cart/updateCartProducts", { userId, updatedItems: items })
             .then((cartItems) => {
                 setAlertMessage("Product added successfully");
             })

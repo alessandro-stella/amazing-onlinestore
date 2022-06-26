@@ -3,11 +3,11 @@ import axios from "axios";
 import { startTransition, useContext, useEffect } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import siteContext from "../../siteContext";
-import AlertMessage from "../AlertMessage";
-import LoadingData from "../LoadingData";
-import NavBar from "../NavBar";
-import ProductsContainer from "../ProductsContainer";
+import siteContext from "../siteContext";
+import AlertMessage from "./AlertMessage";
+import LoadingData from "./LoadingData";
+import NavBar from "./NavBar";
+import ProductsContainer from "./ProductsContainer";
 
 function UploadedProducts() {
     const navigate = useNavigate();
@@ -40,7 +40,7 @@ function UploadedProducts() {
 
     function getProducts() {
         axios
-            .post("/getSellerProducts", {
+            .post("/product/getSellerProducts", {
                 sellerUsername: username,
             })
             .then((res) => {

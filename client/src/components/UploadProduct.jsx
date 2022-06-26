@@ -2,12 +2,12 @@ import { Button, TextField } from "@mui/material";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import siteContext from "../../siteContext";
-import AlertMessage from "../AlertMessage";
-import InputField from "../InputField";
-import NavBar from "../NavBar";
-import ProductCard from "../ProductCard";
-import SelectCategory from "../SelectCategory";
+import siteContext from "../siteContext";
+import AlertMessage from "./AlertMessage";
+import InputField from "./InputField";
+import NavBar from "./NavBar";
+import ProductCard from "./ProductCard";
+import SelectCategory from "./SelectCategory";
 
 function UploadProduct() {
     const { username, userId, isSeller, setSearchKeyword, isSmall } =
@@ -91,7 +91,7 @@ function UploadProduct() {
         };
 
         axios
-            .post("/uploadProduct", productData)
+            .post("/product/uploadProduct", productData)
             .then((res) => {
                 updateMessage("Product uploaded successfully");
 

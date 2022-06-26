@@ -40,7 +40,7 @@ function resetPassword() {
         }
 
         axios
-            .post(`/resetPassword/${resetPasswordToken}`, {
+            .post(`/user/resetPassword/${resetPasswordToken}`, {
                 password: newPassword,
             })
             .then((res) => {

@@ -1,11 +1,10 @@
 import { Button } from "@mui/material";
 import axios from "axios";
-import { startTransition, useEffect } from "react";
-import { useContext, useState } from "react";
+import { startTransition, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import siteContext from "../../siteContext";
-import LoadingData from "../LoadingData";
-import NavBar from "../NavBar";
+import LoadingData from "./LoadingData";
+import NavBar from "./NavBar";
+import siteContext from "../siteContext";
 
 function OrderHistory() {
     const navigate = useNavigate();
@@ -19,7 +18,7 @@ function OrderHistory() {
             if (userId.length <= 24) {
                 startTransition(() => {
                     axios
-                        .post("/getUserOrders", {
+                        .post("/history/getUserOrders", {
                             userId,
                         })
                         .then((res) => {

@@ -2,8 +2,13 @@ const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const routes = require("./routes/api");
 require("dotenv").config();
+
+const authRoutes = require("./routes/auth");
+const cartRoutes = require("./routes/cart");
+const historyRoutes = require("./routes/history");
+const productRoutes = require("./routes/product");
+const userRoutes = require("./routes/user");
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -25,7 +30,12 @@ app.use((req, res, next) => {
 });
 
 app.use(bodyParser.json());
-app.use("/api", routes);
+
+app.use("/api/auth", authRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/history", historyRoutes);
+app.use("/api/product", productRoutes);
+app.use("/api/user", userRoutes);
 
 app.use((err, req, res, next) => {
     console.log(err);

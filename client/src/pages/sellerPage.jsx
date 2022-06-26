@@ -22,7 +22,7 @@ function sellerPage() {
     useEffect(() => {
         const getData = async () => {
             axios
-                .post("/getSellerProducts", { sellerUsername })
+                .post("/product/getSellerProducts", { sellerUsername })
                 .then((res) => {
                     setSellerId(res.data.sellerId);
                     setProducts(res.data.products);

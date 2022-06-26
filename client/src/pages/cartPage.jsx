@@ -34,11 +34,11 @@ function cartPage() {
     useEffect(() => {
         const getData = async () => {
             await axios
-                .post("/removeSinglePurchases", { userId })
+                .post("/cart/removeSinglePurchases", { userId })
                 .then(
                     async (res) =>
                         await axios
-                            .post("/getUserCart", { userId })
+                            .post("/cart/getUserCart", { userId })
                             .then((res) => {
                                 setItems(res.data.items);
                                 updateTotal();
@@ -56,7 +56,7 @@ function cartPage() {
     function removeItem(itemToRemove) {
         const removeFromCart = async () => {
             axios
-                .post("/removeItemFromCart", {
+                .post("/cart/removeItemFromCart", {
                     userId,
                     productId: itemToRemove,
                 })
@@ -77,7 +77,7 @@ function cartPage() {
 
         const getCorrelated = async () => {
             await axios
-                .post("/getCorrelatedProducts", {
+                .post("/product/getCorrelatedProducts", {
                     items: items.map((singleItem) => singleItem.productId),
                 })
                 .then((res) => {
@@ -98,7 +98,7 @@ function cartPage() {
 
         const updateTotal = async () => {
             await axios
-                .post("/getCartTotal", { userId })
+                .post("/cart/getCartTotal", { userId })
                 .then((res) => setTotal(formatPrice(res.data.totalPrice)))
                 .catch((err) => setDisplayError(true));
         };

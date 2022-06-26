@@ -33,7 +33,7 @@ export function CartProduct({
         }
 
         await axios
-            .post("/getProductById", { productId })
+            .post("/product/getProductById", { productId })
             .then((res) => {
                 setProductData(res.data.product);
                 setQuantityToBuy(+cartProductData.quantityToBuy);
@@ -72,7 +72,11 @@ export function CartProduct({
         }
 
         await axios
-            .post("/updateItemQuantity", { userId, productId, quantityToBuy })
+            .post("/cart/updateItemQuantity", {
+                userId,
+                productId,
+                quantityToBuy,
+            })
             .then((res) => {
                 getProductData();
 
@@ -162,8 +166,7 @@ export function CartProduct({
                             <>
                                 <Alert
                                     severity="info"
-                                    className="alert-not-rounded"
-                                    >
+                                    className="alert-not-rounded">
                                     <strong>Confirm</strong> - Are you sure you
                                     want to remove this item?
                                 </Alert>

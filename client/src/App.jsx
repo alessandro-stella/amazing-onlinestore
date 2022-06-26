@@ -4,10 +4,10 @@ import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import siteContext from "./siteContext";
 
 import DisclaimerBanner from "./components/DisclaimerBanner.jsx";
-import OrderHistory from "./components/userPage/OrderHistory";
-import UploadedProducts from "./components/userPage/UploadedProducts";
-import UploadProduct from "./components/userPage/UploadProduct";
-import UserInfo from "./components/userPage/UserInfo";
+import OrderHistory from "./components/OrderHistory";
+import UploadedProducts from "./components/UploadedProducts";
+import UploadProduct from "./components/UploadProduct";
+import UserInfo from "./components/UserInfo";
 import CartPage from "./pages/cartPage";
 import CheckoutPage from "./pages/checkoutPage";
 import DeleteAccountPage from "./pages/deleteAccountPage";
@@ -37,7 +37,6 @@ function App() {
 
     const [isMobile, setIsMobile] = useState(false);
     const [isSmall, setIsSmall] = useState("");
-    const [hasConfirmed, setHasConfirmed] = useState(false);
 
     const mqlWidth = window.matchMedia("screen and (min-width: 900px)");
     const mqlRatio = window.matchMedia("screen and (max-aspect-ratio: 1/2)");
@@ -61,7 +60,7 @@ function App() {
         if (userId !== "" && userId !== null && username === "") {
             const setUserData = () => {
                 axios
-                    .post("/getUserData", { userId })
+                    .post("/user/getUserData", { userId })
                     .then((res) => {
                         decryptId();
                         setUsername(res.data.user.username);
@@ -99,7 +98,7 @@ function App() {
 
     function decryptId() {
         axios
-            .post("/decryptUserId", { userId })
+            .post("/user/decryptUserId", { userId })
             .then((res) => {
                 setUserId(res.data.decryptedId);
             })
@@ -177,9 +176,7 @@ function App() {
                 <Route path="*" element={<Page404 />} />
             </Routes>
 
-            {!(userId === "" || userId === null) && !hasConfirmed ? (
-                <DisclaimerBanner closeBanner={setHasConfirmed} />
-            ) : null}
+            {userId !== "" && userId !== null ? <DisclaimerBanner /> : null}
         </siteContext.Provider>
     );
 }

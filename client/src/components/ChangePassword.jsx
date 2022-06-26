@@ -1,11 +1,11 @@
 import { useContext, useState } from "react";
-import siteContext from "../../siteContext";
-import "../../styles/changePassword.css";
+import siteContext from "../siteContext";
+import "../styles/changePassword.css";
 
 import { Button } from "@mui/material";
 import axios from "axios";
-import AlertMessage from "../AlertMessage";
-import PasswordInputField from "../PasswordInputField";
+import AlertMessage from "./AlertMessage";
+import PasswordInputField from "./PasswordInputField";
 
 function ChangePassword({ userId }) {
     const { isSmall } = useContext(siteContext);
@@ -44,7 +44,7 @@ function ChangePassword({ userId }) {
         setAlertMessage("We're processing your request");
 
         axios
-            .post("/privateResetPassword", {
+            .post("/user/privateResetPassword", {
                 userId,
                 currentPassword,
                 newPassword,
