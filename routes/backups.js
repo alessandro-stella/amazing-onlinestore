@@ -316,18 +316,15 @@ router.post("/uploadUserBackup", (req, res, next) => {
             isSeller: true,
             resetPasswordToken: "",
             resetPasswordTokenExpire: "",
-            __v: 0,
-        },
-        {
-            _id: "627e25baf1c0ecd55ffccfd6",
-            username: "aaaaa",
-            email: "aaaa@gmail.com",
-            password:
-                "$2b$10$HB8Kfj02HFr6jZldoY2alOfd1JwRKAXpRnkJMxRuMw/40PGRbTbV2",
-            registeredOn: "13 May 2022",
-            isSeller: true,
-            resetPasswordToken: "",
-            resetPasswordTokenExpire: "",
+            deleteAccountToken:
+                "ebae38d8f49425749de431bf2d4e1ca7ae31b6cc19da80a8e24b9d91702a1ed8",
+            shipmentInfo: {
+                intercom: "",
+                address: "",
+                city: "",
+                country: "",
+                postalCode: 0,
+            },
             __v: 0,
         },
         {
@@ -340,6 +337,15 @@ router.post("/uploadUserBackup", (req, res, next) => {
             isSeller: true,
             resetPasswordToken: "",
             resetPasswordTokenExpire: "",
+            deleteAccountToken:
+                "abd5b935205dd603ebfd2182b9537ac7b19b13b7f92023f11c5f28972fed4924",
+            shipmentInfo: {
+                intercom: "",
+                address: "",
+                city: "",
+                country: "",
+                postalCode: 0,
+            },
             __v: 0,
         },
         {
@@ -352,6 +358,15 @@ router.post("/uploadUserBackup", (req, res, next) => {
             isSeller: true,
             resetPasswordToken: "",
             resetPasswordTokenExpire: "",
+            deleteAccountToken:
+                "814769b9c9ebbe9bb1dc078e581349f2b8ae262dd41272eb0f4e2ccb99f667d2",
+            shipmentInfo: {
+                intercom: "",
+                address: "",
+                city: "",
+                country: "",
+                postalCode: 0,
+            },
             __v: 0,
         },
         {
@@ -364,6 +379,15 @@ router.post("/uploadUserBackup", (req, res, next) => {
             isSeller: true,
             resetPasswordToken: "",
             resetPasswordTokenExpire: "",
+            deleteAccountToken:
+                "2abbc83a3ad2ab77956f385996fdaa4a35d6ffcd6a8c3605b7be65bf0c97a1d1",
+            shipmentInfo: {
+                intercom: "",
+                address: "",
+                city: "",
+                country: "",
+                postalCode: 0,
+            },
             __v: 0,
         },
         {
@@ -371,11 +395,20 @@ router.post("/uploadUserBackup", (req, res, next) => {
             username: "AmazingOfficial",
             email: "alessandro.stella2004@gmail.com",
             password:
-                "$2b$10$bEmWFAnji1ifvjYTxJtGqOhJbAvuLP8nVT5H9ofFqCxPZFu5zlzya",
+                "$2b$10$Vhj/w1.6KwpSnQI.remNx.fw45Wm6j9F0o5omRbjzof//Yp2r81Hi",
             registeredOn: "27 April 2022",
             isSeller: true,
             resetPasswordToken: "",
             resetPasswordTokenExpire: "",
+            deleteAccountToken:
+                "c3a4d709c01c1127e394d8a8ab9cbd2214339937ba589d5ced28011ceeb26c86",
+            shipmentInfo: {
+                intercom: "",
+                address: "",
+                city: "",
+                country: "",
+                postalCode: 0,
+            },
             __v: 0,
         },
     ];

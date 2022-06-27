@@ -28,12 +28,6 @@ function checkoutPage() {
 
     const [displayError, setDisplayError] = useState(false);
 
-    const [intercom, setIntercom] = useState("");
-    const [address, setAddress] = useState("");
-    const [city, setCity] = useState("");
-    const [country, setCountry] = useState("");
-    const [postalCode, setPostalCode] = useState("");
-
     useEffect(() => {
         if (!userId) {
             navigate("/loginPage");
@@ -272,18 +266,7 @@ function checkoutPage() {
                                 </div>
 
                                 <div className="checkout-section__data">
-                                    <ShipmentAddress
-                                        intercom={intercom}
-                                        setIntercom={setIntercom}
-                                        address={address}
-                                        setAddress={setAddress}
-                                        city={city}
-                                        setCity={setCity}
-                                        country={country}
-                                        setCountry={setCountry}
-                                        postalCode={postalCode}
-                                        setPostalCode={setPostalCode}
-                                    />
+                                    <ShipmentAddress />
                                 </div>
                             </div>
                         </div>

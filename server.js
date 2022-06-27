@@ -4,12 +4,6 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const authRoutes = require("./routes/auth");
-const cartRoutes = require("./routes/cart");
-const historyRoutes = require("./routes/history");
-const productRoutes = require("./routes/product");
-const userRoutes = require("./routes/user");
-
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -31,11 +25,12 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 
-app.use("/api/auth", authRoutes);
-app.use("/api/cart", cartRoutes);
-app.use("/api/history", historyRoutes);
-app.use("/api/product", productRoutes);
-app.use("/api/user", userRoutes);
+app.use("/api/auth", require("./routes/auth"));
+app.use("/api/cart", require("./routes/cart"));
+app.use("/api/history", require("./routes/history"));
+app.use("/api/product", require("./routes/product"));
+app.use("/api/user", require("./routes/user"));
+app.use("/api/backup", require("./routes/backups"));
 
 app.use((err, req, res, next) => {
     console.log(err);

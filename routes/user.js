@@ -17,6 +17,40 @@ router.post("/getUserData", (req, res, next) => {
         .catch((err) => res.status(400).json({ msg: "User not found" }));
 });
 
+router.post("/getUserShipmentInfo", (req, res, next) => {
+    User.findById(req.body.userId)
+        .then((user) =>
+            res.status(200).json({ shipmentInfo: user.shipmentInfo })
+        )
+        .catch((err) => res.status(400).json({ msg: "user not found" }));
+});
+
+router.post("/updateUserShipmentInfo", (req, res, next) => {
+    const { userId, newShipmentInfo } = req.body;
+    console.log(newShipmentInfo);
+
+    User.findById(userId)
+        .then((user) => {
+            User.findByIdAndUpdate(
+                { _id: userId },
+                { shipmentInfo: newShipmentInfo },
+                { new: true }
+            )
+                .then((newUser) => {
+                    console.log(newUser);
+                    return res
+                        .status(200)
+                        .json({ shipmentInfo: newUser.shipmentInfo });
+                })
+                .catch((err) =>
+                    res.status(400).json({
+                        msg: "error while updating user shipment info",
+                    })
+                );
+        })
+        .catch((err) => res.status(400).json({ msg: "user not found" }));
+});
+
 router.post("/getUserSince", (req, res, next) => {
     User.findById(req.body.userId)
         .then((user) => {

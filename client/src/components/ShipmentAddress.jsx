@@ -5,22 +5,17 @@ import InputField from "./InputField";
 import siteContext from "../siteContext";
 import AlertMessage from "./AlertMessage";
 
-function ShipmentAddress({
-    intercom,
-    setIntercom,
-    address,
-    setAddress,
-    city,
-    setCity,
-    country,
-    setCountry,
-    postalCode,
-    setPostalCode,
-}) {
+function ShipmentAddress() {
     const { isSmall } = useContext(siteContext);
 
     const [isEditing, setIsEditing] = useState(true);
     const [alertMessage, setAlertMessage] = useState("");
+
+    const [intercom, setIntercom] = useState("");
+    const [address, setAddress] = useState("");
+    const [city, setCity] = useState("");
+    const [country, setCountry] = useState("");
+    const [postalCode, setPostalCode] = useState("");
 
     function checkData() {
         setAlertMessage("");

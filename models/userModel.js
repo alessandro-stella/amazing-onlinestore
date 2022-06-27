@@ -29,6 +29,17 @@ const userSchema = new Schema({
         required: true,
     },
 
+    shipmentInfo: {
+        type: Schema.Types.Mixed,
+        default: {
+            intercom: "",
+            address: "",
+            city: "",
+            country: "",
+            postalCode: "",
+        },
+    },
+
     resetPasswordToken: String,
     resetPasswordTokenExpire: String,
 
