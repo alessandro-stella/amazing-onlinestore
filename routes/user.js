@@ -27,7 +27,6 @@ router.post("/getUserShipmentInfo", (req, res, next) => {
 
 router.post("/updateUserShipmentInfo", (req, res, next) => {
     const { userId, newShipmentInfo } = req.body;
-    console.log(newShipmentInfo);
 
     User.findById(userId)
         .then((user) => {
@@ -36,12 +35,9 @@ router.post("/updateUserShipmentInfo", (req, res, next) => {
                 { shipmentInfo: newShipmentInfo },
                 { new: true }
             )
-                .then((newUser) => {
-                    console.log(newUser);
-                    return res
-                        .status(200)
-                        .json({ shipmentInfo: newUser.shipmentInfo });
-                })
+                .then((newUser) =>
+                    res.status(200).json({ shipmentInfo: newUser.shipmentInfo })
+                )
                 .catch((err) =>
                     res.status(400).json({
                         msg: "error while updating user shipment info",
