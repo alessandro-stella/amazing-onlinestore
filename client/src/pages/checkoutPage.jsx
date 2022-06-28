@@ -353,7 +353,7 @@ function checkoutPage() {
                                 fullWidth
                                 size="large"
                                 variant="contained"
-                                color="yellowButton"
+                                color="lightButton"
                                 onClick={() => {
                                     buyProducts();
                                 }}>

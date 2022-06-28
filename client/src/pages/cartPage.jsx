@@ -161,7 +161,7 @@ function cartPage() {
                                                 size="large"
                                                 fullWidth
                                                 variant="contained"
-                                                color="yellowButton"
+                                                color="lightButton"
                                                 onClick={() =>
                                                     navigate("/checkoutPage")
                                                 }>

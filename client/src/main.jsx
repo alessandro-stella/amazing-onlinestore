@@ -13,7 +13,7 @@ const theme = createTheme({
             main: "hsl(166, 93%, 48%)",
         },
 
-        yellowButton: {
+        lightButton: {
             main: "hsl(181, 93%, 51%)",
         },
 

@@ -70,7 +70,7 @@
     flex: 1;
 }
 
-.yellow-button:hover {
+.light-button:hover {
     background-color: hsl(181, 93%, 41%) !important;
 }
 

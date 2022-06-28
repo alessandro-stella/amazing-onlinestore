@@ -258,8 +258,8 @@ function productPage() {
                                     <Button
                                         size={isSmall ? "large" : "small"}
                                         variant="contained"
-                                        color="yellowButton"
-                                        className="yellow-button"
+                                        color="lightButton"
+                                        className="light-button"
                                         onClick={() => addToCart()}>
                                         add to cart
                                     </Button>
