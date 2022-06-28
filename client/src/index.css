@@ -17,8 +17,9 @@
 :root {
     --dark-gray: #131921;
     --text-color: #0f1111;
-    --orange: hsl(35, 100%, 55%);
-    --orange-light: hsl(35, 100%, 65%);
+
+    --green: hsl(166, 93%, 48%);
+    --green-light: hsl(166, 93%, 60%);
 
     --bottom-shadow: 0 0.2em 0.5em #ccc;
 }
@@ -66,7 +67,7 @@ a {
 }
 
 a:hover {
-    color: var(--orange);
+    color: var(--green);
 }
 
 .MuiAlert-standardError,

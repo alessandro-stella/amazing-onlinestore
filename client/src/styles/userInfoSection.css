@@ -1,0 +1,33 @@
+.user-info-section {
+    padding: 1em;
+    flex: 1.5;
+
+    box-shadow: var(--bottom-shadow);
+    border-radius: 0.5em;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.75em;
+
+    margin-top: 2em;
+}
+
+.user-info-section .title {
+    padding: 0;
+}
+
+.user-info-section .shipment-address {
+    width: 100%;
+}
+
+.user-info-section .shipment-button {
+    width: 100%;
+
+    margin-top: 0.5em;
+}
+
+.user-info-section .editing-shipment {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}

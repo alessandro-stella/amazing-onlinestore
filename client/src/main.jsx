@@ -10,11 +10,11 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 const theme = createTheme({
     palette: {
         primary: {
-            main: "hsl(35, 100%, 55%)",
+            main: "hsl(166, 93%, 48%)",
         },
 
         yellowButton: {
-            main: "#ffd814",
+            main: "hsl(181, 93%, 51%)",
         },
 
         secondaryButton: {
@@ -26,11 +26,11 @@ const theme = createTheme({
         },
 
         searchBar: {
-            main: "hsl(35, 100%, 55%)",
+            main: "hsl(166, 93%, 48%)",
         },
 
         orangeIcon: {
-            main: "hsl(35, 100%, 55%)",
+            main: "hsl(166, 93%, 48%)",
         },
     },
 

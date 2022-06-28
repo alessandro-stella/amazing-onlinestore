@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import siteContext from "../siteContext";
-import "../styles/changePassword.css";
+import "../styles/userInfoSection.css";
 
 import { Button } from "@mui/material";
 import axios from "axios";
@@ -75,9 +75,7 @@ function ChangePassword({ userId }) {
     }
 
     return (
-        <div className="change-password">
-            <div className="title">Change password</div>
-
+        <>
             <PasswordInputField
                 fieldLabel={"Current password"}
                 fieldValue={currentPassword}
@@ -116,7 +114,7 @@ function ChangePassword({ userId }) {
                 onClick={() => changePassword()}>
                 change password
             </Button>
-        </div>
+        </>
     );
 }
 

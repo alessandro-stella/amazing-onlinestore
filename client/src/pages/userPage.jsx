@@ -18,8 +18,7 @@ import SiteInfo from "../components/SiteInfo";
 function userPage() {
     const navigate = useNavigate();
 
-    const { username, userId, isSeller, setSearchKeyword } =
-        useContext(siteContext);
+    const { userId, isSeller, setSearchKeyword } = useContext(siteContext);
 
     useEffect(() => {
         if (!userId) {
@@ -32,7 +31,7 @@ function userPage() {
     }, []);
 
     function navigateTo(page) {
-        window.location = `/userPage/${page}`;
+        navigate(`/userPage/${page}`);
     }
 
     return (

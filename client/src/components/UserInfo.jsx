@@ -7,6 +7,7 @@ import AlertMessage from "./AlertMessage";
 import NavBar from "./NavBar";
 import ChangePassword from "./ChangePassword";
 import ChangeUsername from "./ChangeUsername";
+import ShipmentAddress from "./ShipmentAddress";
 
 function UserInfo() {
     const {
@@ -201,13 +202,13 @@ function UserInfo() {
                             <div className="button-group">
                                 <Button
                                     size="large"
-                                    variant="contained"
+                                    variant="outlined"
                                     onClick={() => userLogout()}>
                                     Logout
                                 </Button>
                                 <Button
                                     size="large"
-                                    variant="contained"
+                                    variant="outlined"
                                     onClick={() => goToDeleteAccount()}>
                                     delete account
                                 </Button>
@@ -220,8 +221,21 @@ function UserInfo() {
                                 />
                             )}
                         </div>
-                        <ChangeUsername userId={userId} />
-                        <ChangePassword userId={userId} />
+
+                        <div className="user-info-section shipment-address">
+                            <div className="title">Shipment info</div>
+                            <ShipmentAddress />
+                        </div>
+
+                        <div className="user-info-section change-username">
+                            <div className="title">Change username</div>
+                            <ChangeUsername userId={userId} />
+                        </div>
+
+                        <div className="user-info-section change-password">
+                            <div className="title">Change password</div>
+                            <ChangePassword userId={userId} />
+                        </div>
                     </div>
                 </div>
             </div>

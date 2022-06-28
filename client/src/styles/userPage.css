@@ -41,7 +41,7 @@
 }
 
 .select-section .icon-container {
-    background-color: var(--orange-light);
+    background-color: var(--green-light);
 
     width: 4em;
 
@@ -94,7 +94,7 @@
     width: 0.35em;
     height: 0.35em;
 
-    background-color: var(--orange);
+    background-color: var(--green);
 
     position: relative;
     margin: auto 0;

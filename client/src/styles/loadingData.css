@@ -23,7 +23,7 @@
     width: 1em;
     height: 1em;
     border-radius: 50%;
-    background: var(--orange);
+    background: var(--green);
     animation-timing-function: cubic-bezier(0, 1, 1, 0);
 }
 

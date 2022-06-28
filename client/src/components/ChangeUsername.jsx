@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import siteContext from "../siteContext";
-import "../styles/changePassword.css";
+import "../styles/userInfoSection.css";
 
 import { Button } from "@mui/material";
 import axios from "axios";
@@ -66,9 +66,7 @@ function ChangeUsername({ userId }) {
     }
 
     return (
-        <div className="change-password">
-            <div className="title">Change username</div>
-
+        <>
             <InputField
                 fieldValue={newUsername}
                 fieldType="text"
@@ -93,7 +91,7 @@ function ChangeUsername({ userId }) {
                 onClick={() => changeUsername()}>
                 change username
             </Button>
-        </div>
+        </>
     );
 }
 

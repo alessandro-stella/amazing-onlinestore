@@ -1,17 +1,18 @@
 import "../styles/checkoutPage.css";
 
-import PayPalIcon from "../icons/payPalIcon.svg?component";
-import AppleIcon from "../icons/appleIcon.svg?component";
-import CreditCardIcon from "../icons/creditCardIcon.svg?component";
-import GoogleIcon from "../icons/googleIcon.svg?component";
+import {
+    faApplePay, faGooglePay, faPaypal
+} from "@fortawesome/free-brands-svg-icons";
+import { faCreditCard } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 
 function PaymentMethods() {
     const payments = [
-        { method: "Credit / Debit Card", icon: CreditCardIcon },
-        { method: "PayPal", icon: PayPalIcon },
-        { method: "Apple Pay", icon: AppleIcon },
-        { method: "Google Pay", icon: GoogleIcon },
+        { method: "Credit / Debit Card", icon: faCreditCard },
+        { method: "PayPal", icon: faPaypal },
+        { method: "Apple Pay", icon: faApplePay },
+        { method: "Google Pay", icon: faGooglePay },
     ];
 
     const [selected, setSelected] = useState(0);
@@ -29,7 +30,10 @@ function PaymentMethods() {
                         {singleOption.method}
                     </div>
 
-                    <singleOption.icon className="logo" />
+                    <FontAwesomeIcon
+                        icon={singleOption.icon}
+                        size={index === 2 || index === 3 ? "4x" : "3x"}
+                    />
                 </div>
             ))}
         </div>
