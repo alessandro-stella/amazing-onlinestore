@@ -44,7 +44,7 @@ const sendEmail = (options) => {
     </div>
 
     <a
-        href="https://amazon-dei-poveri.herokuapp.com/shopPage"
+        href="https://amazing-onlinestore.herokuapp.com/shopPage"
         no-referrer
         target="_blank"
         clicktracking="off"
@@ -114,7 +114,7 @@ const sendEmail = (options) => {
         delete your account, you can do it here
     </div>
     <a
-        href="https://amazon-dei-poveri.herokuapp.com/deleteAccountPage/${options.deleteAccountToken}"
+        href="https://amazing-onlinestore.herokuapp.com/deleteAccountPage/${options.deleteAccountToken}"
         no-referrer
         target="_blank"
         clicktracking="off"
@@ -172,7 +172,7 @@ const sendEmail = (options) => {
     </div>
 
     <a
-    href="https://amazon-dei-poveri.herokuapp.com/resetPassword/${options.resetPasswordToken}"
+    href="https://amazing-onlinestore.herokuapp.com/resetPassword/${options.resetPasswordToken}"
         no-referrer
         target="_blank"
         clicktracking="off"
