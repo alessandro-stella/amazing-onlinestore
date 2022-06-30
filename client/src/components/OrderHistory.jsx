@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import LoadingData from "./LoadingData";
 import NavBar from "./NavBar";
 import siteContext from "../siteContext";
+import OrderCard from "./OrderCard";
 
 function OrderHistory() {
     const navigate = useNavigate();
@@ -22,6 +23,7 @@ function OrderHistory() {
                             userId,
                         })
                         .then((res) => {
+                            console.log(res.data.orders);
                             setPurchases(res.data.orders);
                         })
                         .catch((err) => console.log(err));
@@ -44,7 +46,14 @@ function OrderHistory() {
                         {purchases.length === 0 ? (
                             <h1>No purchases</h1>
                         ) : (
-                            <h1>{purchases.length}</h1>
+                            <>
+                                {purchases.map((singlePurchase, index) => (
+                                    <OrderCard
+                                        key={index}
+                                        orderData={singlePurchase}
+                                    />
+                                ))}
+                            </>
                         )}
                     </>
                 )}

@@ -4,10 +4,11 @@ import siteContext from "../siteContext";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+    createTheme,
     FormControl,
     IconButton,
-    InputAdornment,
-    OutlinedInput
+    OutlinedInput,
+    ThemeProvider,
 } from "@mui/material";
 
 function SearchBar({ startSearch }) {
@@ -33,14 +34,12 @@ function SearchBar({ startSearch }) {
                     autoComplete: "off",
                 }}
                 endAdornment={
-                    <InputAdornment size="small" position="end">
-                        <IconButton
-                            color="orangeIcon"
-                            onClick={() => startSearch()}
-                            edge="end">
-                            <FontAwesomeIcon icon={faSearch} />
-                        </IconButton>
-                    </InputAdornment>
+                    <IconButton
+                        color="orangeIcon"
+                        onClick={() => startSearch()}
+                        edge="end">
+                        <FontAwesomeIcon icon={faSearch} />
+                    </IconButton>
                 }
                 placeholder="Search..."
             />

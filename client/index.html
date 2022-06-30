@@ -7,13 +7,24 @@
         <meta name="theme-color" content="#131921" />
         <title>Amazing</title>
 
-        <!-- <script>
-            window.__REACT_DEVTOOLS_GLOBAL_HOOK__.inject = function () {};
-        </script> -->
+        <link rel="stylesheet" href="./src/index.css" />
+        <link rel="stylesheet" href="./src/styles/loadingData.css" />
     </head>
 
     <body>
-        <div id="root"></div>
+        <div id="root">
+            <div class="loading-data">
+                <div class="loader">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+
+                <div class="loading-data__text">Loading...</div>
+            </div>
+        </div>
+
         <script type="module" src="/src/main.jsx"></script>
     </body>
 </html>
