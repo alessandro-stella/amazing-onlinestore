@@ -25,6 +25,8 @@ function productPage() {
     const [alertMessage, setAlertMessage] = useState("");
 
     useEffect(() => {
+        window.scrollTo(0, 0);
+
         const getProductData = async () => {
             axios
                 .post("/product/getProductById", { productId })
