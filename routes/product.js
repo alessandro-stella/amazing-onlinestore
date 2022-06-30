@@ -67,7 +67,11 @@ router.post("/deleteProduct", (req, res, next) => {
                                         (singleOrder) =>
                                             singleOrder.productId !== productId
                                                 ? singleOrder
-                                                : "deleted-item"
+                                                : {
+                                                      msg: "deleted-item",
+                                                      orderDate:
+                                                          singleOrder.orderDate,
+                                                  }
                                     );
 
                                     singleHistory.orders = newOrders;
