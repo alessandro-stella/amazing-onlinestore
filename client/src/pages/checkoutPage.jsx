@@ -68,6 +68,7 @@ function checkoutPage() {
                 return;
             }
 
+            console.log(cartItems);
             setProductsToBuy(cartItems);
         };
 

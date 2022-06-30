@@ -23,7 +23,6 @@ function OrderHistory() {
                             userId,
                         })
                         .then((res) => {
-                            console.log(res.data.orders);
                             setPurchases(res.data.orders);
                         })
                         .catch((err) => console.log(err));
@@ -37,7 +36,7 @@ function OrderHistory() {
             <NavBar />
 
             <div className="user-page">
-                <div>order history</div>
+                <h1>order history</h1>
 
                 {purchases === "Loading..." ? (
                     <LoadingData />
