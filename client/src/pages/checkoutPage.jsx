@@ -27,14 +27,16 @@ function checkoutPage() {
     const [shippingCost, setShippingCost] = useState(0);
 
     const [displayError, setDisplayError] = useState(false);
+    const [checkoutError, setCheckoutError] = useState("");
+
+    const [completedOrder, setCompletedOrder] = useState("");
 
     useEffect(() => {
         if (!userId) {
             navigate("/loginPage");
+            return;
         }
-    }, []);
 
-    useEffect(() => {
         if (userId.length > 24) {
             return;
         }
@@ -68,7 +70,6 @@ function checkoutPage() {
                 return;
             }
 
-            console.log(cartItems);
             setProductsToBuy(cartItems);
         };
 
@@ -88,6 +89,10 @@ function checkoutPage() {
             return;
         }
 
+        if (productsToBuy.length === 0) {
+            navigate("/userPage/orderHistory");
+        }
+
         const getTotal = async () => {
             updateTotal();
             calculateShippingCost();
@@ -103,6 +108,12 @@ function checkoutPage() {
 
         calculateShippingCost();
     }, [fastShipping]);
+
+    function resetCheckoutAlert() {
+        setTimeout(() => {
+            setCheckoutError("");
+        }, 2500);
+    }
 
     function calculateShippingCost() {
         if (!fastShipping) {
@@ -219,6 +230,11 @@ function checkoutPage() {
                     productId: itemToRemove,
                 })
                 .then((res) => {
+                    if (res.data.updatedItems.length === 0) {
+                        navigate("/shopPage");
+                        return;
+                    }
+
                     setProductsToBuy(res.data.updatedItems);
                     updateTotal();
                 })
@@ -232,8 +248,34 @@ function checkoutPage() {
         removeFromCart();
     }
 
-    function buyProducts() {
-        console.log(productsToBuy);
+    async function buyProducts() {
+        await axios
+            .post("/user/getShipmentInfo", { userId })
+            .then(async (res) => {
+                let shipmentInfo = res.data.shipmentInfo;
+
+                await axios
+                    .post("/history/addNewOrders", {
+                        userId,
+                        productsToAdd: productsToBuy,
+                        shipmentInfo,
+                        fastShipping,
+                    })
+                    .then((res) => {
+                        setCompletedOrder("loading");
+
+                        setTimeout(() => {
+                            navigate(0);
+                        }, 2500);
+                    })
+                    .catch((err) => {
+                        setCompletedOrder("error");
+                    });
+            })
+            .catch((err) => {
+                setCheckoutError("Missing shipment info");
+                resetCheckoutAlert();
+            });
     }
 
     return (
@@ -242,185 +284,221 @@ function checkoutPage() {
 
             <div className="checkout-page">
                 <div className="title">
-                    Order summary (
-                    {productsToBuy === "Loading..."
-                        ? productsToBuy
-                        : `${
-                              Array.isArray(productsToBuy)
-                                  ? productsToBuy.length
-                                  : 1
-                          } items`}
-                    )
+                    Order summary
+                    {completedOrder === "loading" ? (
+                        ""
+                    ) : (
+                        <>
+                            {productsToBuy === "Loading..."
+                                ? productsToBuy
+                                : ` (${
+                                      Array.isArray(productsToBuy)
+                                          ? productsToBuy.length
+                                          : 1
+                                  } items)`}
+                        </>
+                    )}
                 </div>
 
                 <div className="checkout-page__main">
-                    <div className="checkout-summary">
-                        <div className="checkout-section checkout-section-1">
-                            <div className="checkout-section__inner">
-                                <div className="checkout-section__title">
-                                    <div className="checkout-section__title-number">
-                                        1
-                                    </div>
-                                    <div className="checkout-section__title-text">
-                                        Delivery address
-                                    </div>
-                                </div>
+                    {completedOrder === "" && (
+                        <>
+                            <div className="checkout-summary">
+                                <div className="checkout-section checkout-section-1">
+                                    <div className="checkout-section__inner">
+                                        <div className="checkout-section__title">
+                                            <div className="checkout-section__title-number">
+                                                1
+                                            </div>
+                                            <div className="checkout-section__title-text">
+                                                Delivery address
+                                            </div>
+                                        </div>
 
-                                <div className="checkout-section__data">
-                                    <ShipmentAddress />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="checkout-section checkout-section-2">
-                            <div className="checkout-section__inner">
-                                <div className="checkout-section__title">
-                                    <div className="checkout-section__title-number">
-                                        2
-                                    </div>
-                                    <div className="checkout-section__title-text">
-                                        Terms of payment
+                                        <div className="checkout-section__data">
+                                            <ShipmentAddress />
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="checkout-section__data">
-                                    <PaymentMethods />
-                                </div>
-                            </div>
 
-                            <Alert severity="info">
-                                <strong>Info</strong> - This feature is
-                                currently for decorative purposes only, a
-                                payment system may be implemented in the future
-                            </Alert>
-                        </div>
-
-                        <div className="checkout-section checkout-section-3">
-                            <div className="checkout-section__title">
-                                <div className="checkout-section__title-number">
-                                    3
-                                </div>
-                                <div className="checkout-section__title-text">
-                                    Review the items and shipping date
-                                </div>
-                            </div>
-
-                            {displayError && (
-                                <AlertMessage
-                                    className="alert-message"
-                                    alertMessage="There's been an error during the process, please try again"
-                                />
-                            )}
-
-                            {productsToBuy === "Loading..." ? (
-                                <LoadingData />
-                            ) : (
-                                <div className="products-summary">
-                                    {singleCheckout ? (
-                                        <ProductCard
-                                            userId={userId}
-                                            cartProductData={productsToBuy}
-                                            removeItem={removeItem}
-                                            updateTotal={updateTotal}
-                                        />
-                                    ) : (
-                                        <>
-                                            {productsToBuy.map(
-                                                (singleProduct) => (
-                                                    <ProductCard
-                                                        key={
-                                                            singleProduct.productId
-                                                        }
-                                                        userId={userId}
-                                                        cartProductData={
-                                                            singleProduct
-                                                        }
-                                                        removeItem={removeItem}
-                                                        updateTotal={
-                                                            updateTotal
-                                                        }
-                                                    />
-                                                )
-                                            )}
-                                        </>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                    </div>
-
-                    <div className="side-section">
-                        <div className="side-section__pay">
-                            <Button
-                                fullWidth
-                                size="large"
-                                variant="contained"
-                                color="lightButton"
-                                onClick={() => {
-                                    buyProducts();
-                                }}>
-                                buy now
-                            </Button>
-
-                            {totalError ? (
-                                <AlertMessage
-                                    className="alert-message"
-                                    alertMessage="There's been an error during the process, please try again"
-                                />
-                            ) : (
-                                <>
-                                    <div className="summary-subtext">
-                                        Order summary
-                                    </div>
-
-                                    <div className="subsection">
-                                        Current total (
-                                        {productsToBuy === "Loading..."
-                                            ? productsToBuy
-                                            : `${
-                                                  Array.isArray(productsToBuy)
-                                                      ? productsToBuy.length
-                                                      : 1
-                                              } items`}
-                                        ): <strong>${total}</strong>
-                                    </div>
-
-                                    <div className="subsection shipping-cost">
-                                        Shipping costs:{" "}
-                                        <strong>
-                                            $
-                                            {productsToBuy === "Loading..."
-                                                ? productsToBuy
-                                                : shippingCost}
-                                        </strong>
-                                        <div className="select-fast-shipping">
-                                            <FormControlLabel
-                                                control={
-                                                    <Checkbox
-                                                        size="small"
-                                                        checked={fastShipping}
-                                                        onChange={() =>
-                                                            setFastShipping(
-                                                                !fastShipping
-                                                            )
-                                                        }
-                                                    />
-                                                }
-                                                label="Fast shipping ($1.50 per item)"
-                                            />
+                                <div className="checkout-section checkout-section-2">
+                                    <div className="checkout-section__inner">
+                                        <div className="checkout-section__title">
+                                            <div className="checkout-section__title-number">
+                                                2
+                                            </div>
+                                            <div className="checkout-section__title-text">
+                                                Terms of payment
+                                            </div>
+                                        </div>
+                                        <div className="checkout-section__data">
+                                            <PaymentMethods />
                                         </div>
                                     </div>
 
-                                    <div className="total">
-                                        Total:{" "}
-                                        <strong>
-                                            $
-                                            {formatPrice([total, shippingCost])}
-                                        </strong>
+                                    <Alert severity="info">
+                                        <strong>Info</strong> - This feature is
+                                        currently for decorative purposes only,
+                                        a payment system may be implemented in
+                                        the future
+                                    </Alert>
+                                </div>
+
+                                <div className="checkout-section checkout-section-3">
+                                    <div className="checkout-section__title">
+                                        <div className="checkout-section__title-number">
+                                            3
+                                        </div>
+                                        <div className="checkout-section__title-text">
+                                            Review the items and shipping date
+                                        </div>
                                     </div>
-                                </>
-                            )}
-                        </div>
-                    </div>
+
+                                    {displayError && (
+                                        <AlertMessage
+                                            className="alert-message"
+                                            alertMessage="There's been an error during the process, please try again"
+                                        />
+                                    )}
+
+                                    {productsToBuy === "Loading..." ? (
+                                        <LoadingData />
+                                    ) : (
+                                        <div className="products-summary">
+                                            {singleCheckout ? (
+                                                <ProductCard
+                                                    userId={userId}
+                                                    cartProductData={
+                                                        productsToBuy
+                                                    }
+                                                    removeItem={removeItem}
+                                                    updateTotal={updateTotal}
+                                                />
+                                            ) : (
+                                                <>
+                                                    {productsToBuy.map(
+                                                        (singleProduct) => (
+                                                            <ProductCard
+                                                                key={
+                                                                    singleProduct.productId
+                                                                }
+                                                                userId={userId}
+                                                                cartProductData={
+                                                                    singleProduct
+                                                                }
+                                                                removeItem={
+                                                                    removeItem
+                                                                }
+                                                                updateTotal={
+                                                                    updateTotal
+                                                                }
+                                                            />
+                                                        )
+                                                    )}
+                                                </>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="side-section">
+                                <div className="side-section__pay">
+                                    <Button
+                                        fullWidth
+                                        size="large"
+                                        variant="contained"
+                                        color="lightButton"
+                                        onClick={() => {
+                                            buyProducts();
+                                        }}>
+                                        buy now
+                                    </Button>
+
+                                    {checkoutError && (
+                                        <AlertMessage
+                                            alertMessage={checkoutError}
+                                        />
+                                    )}
+
+                                    {totalError ? (
+                                        <AlertMessage
+                                            className="alert-message"
+                                            alertMessage="There's been an error during the process, please try again"
+                                        />
+                                    ) : (
+                                        <>
+                                            <div className="summary-subtext">
+                                                Order summary
+                                            </div>
+
+                                            <div className="subsection">
+                                                Current total (
+                                                {productsToBuy === "Loading..."
+                                                    ? productsToBuy
+                                                    : `${
+                                                          Array.isArray(
+                                                              productsToBuy
+                                                          )
+                                                              ? productsToBuy.length
+                                                              : 1
+                                                      } items`}
+                                                ): <strong>${total}</strong>
+                                            </div>
+
+                                            <div className="subsection shipping-cost">
+                                                Shipping costs:{" "}
+                                                <strong>
+                                                    $
+                                                    {productsToBuy ===
+                                                    "Loading..."
+                                                        ? productsToBuy
+                                                        : shippingCost}
+                                                </strong>
+                                                <div className="select-fast-shipping">
+                                                    <FormControlLabel
+                                                        control={
+                                                            <Checkbox
+                                                                size="small"
+                                                                checked={
+                                                                    fastShipping
+                                                                }
+                                                                onChange={() =>
+                                                                    setFastShipping(
+                                                                        !fastShipping
+                                                                    )
+                                                                }
+                                                            />
+                                                        }
+                                                        label="Fast shipping ($1.50 per item)"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="total">
+                                                Total:{" "}
+                                                <strong>
+                                                    $
+                                                    {formatPrice([
+                                                        total,
+                                                        shippingCost,
+                                                    ])}
+                                                </strong>
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+                        </>
+                    )}
+
+                    {completedOrder === "error" && (
+                        <AlertMessage alertMessage="There's been an error during the process, please try again" />
+                    )}
+
+                    {completedOrder === "loading" && <LoadingData />}
+
+                    {completedOrder === true && <h1>order completed</h1>}
                 </div>
             </div>
         </>

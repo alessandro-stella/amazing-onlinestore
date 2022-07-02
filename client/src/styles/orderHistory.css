@@ -1,0 +1,11 @@
+.title-container {
+    background-color: red;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title-container .title {
+    /* padding: 0; */
+}

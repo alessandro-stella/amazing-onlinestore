@@ -1,13 +1,15 @@
-import { useContext, useEffect, useState } from "react";
-import "../styles/checkoutPage.css";
 import { Button } from "@mui/material";
-import InputField from "./InputField";
-import siteContext from "../siteContext";
-import AlertMessage from "./AlertMessage";
 import axios from "axios";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import siteContext from "../siteContext";
+import "../styles/checkoutPage.css";
+import AlertMessage from "./AlertMessage";
+import InputField from "./InputField";
 import LoadingData from "./LoadingData";
 
 function ShipmentAddress() {
+    const navigate = useNavigate();
     const { isSmall, userId } = useContext(siteContext);
 
     const [isEditing, setIsEditing] = useState("loading");
@@ -20,6 +22,11 @@ function ShipmentAddress() {
     const [postalCode, setPostalCode] = useState("");
 
     useEffect(() => {
+        if (!userId) {
+            navigate("/loginPage");
+            return;
+        }
+
         if (userId.length > 24) {
             return;
         }

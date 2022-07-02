@@ -98,22 +98,19 @@ router.post("/removeItemFromCart", async (req, res, next) => {
         (singleItem) => singleItem.productId !== productId
     );
 
-    Cart.findOneAndUpdate(
-        { _id: userCart._id },
-        { items: newItems },
-        { new: true }
-    )
-        .then((newCart) => {
-            console.log(newCart);
+    userCart.items = newItems;
+    userCart.markModified("items");
 
-            return res.status(200).json({
-                msg: "product removed successfully",
-                updatedItems: newCart.items,
-            });
-        })
-        .catch((err) =>
-            res.status(400).json({ msg: "error during item remotion" })
-        );
+    await userCart.save(function (err) {
+        if (err) {
+            return res.status(400).json({ msg: "error during item remotion" });
+        }
+
+        return res.status(200).json({
+            msg: "product removed successfully",
+            updatedItems: userCart.items,
+        });
+    });
 });
 
 router.post("/removeSinglePurchases", (req, res, next) => {
@@ -126,26 +123,25 @@ router.post("/removeSinglePurchases", (req, res, next) => {
     }
 
     Cart.findOne({ userId })
-        .then((cart) => {
+        .then(async (cart) => {
             let updatedItems = cart.items.filter(
                 (singleItem) => singleItem.singlePurchase !== true
             );
 
-            Cart.findOneAndUpdate(
-                { userId },
-                { items: updatedItems },
-                (err, cart) => {
-                    if (err) {
-                        res.status(400).json({
-                            msg: "cart not found or not updated",
-                        });
-                    }
-
-                    return res
-                        .status(200)
-                        .json({ msg: "item removed", updatedItems });
+            cart.items = updatedItems;
+            cart.markModified("items");
+                    
+            await cart.save(function (err) {
+                if (err) {
+                    return res.status(400).json({
+                        msg: "cart not updated",
+                    });
                 }
-            );
+
+                return res
+                    .status(200)
+                    .json({ msg: "item removed", updatedItems });
+            });
         })
         .catch((err) => res.status(400).json({ msg: "cart not found" }));
 });
@@ -194,22 +190,6 @@ router.post("/getCartTotal", (req, res, next) => {
             );
         })
         .catch((err) => res.status(400).json({ msg: "cart not found" }));
-});
-
-router.post("/removeAllFromCart", (req, res, next) => {
-    const { userId } = req.body;
-
-    const user = User.findById(userId);
-
-    if (!user) {
-        return res.status(400).json({ msg: "user not found" });
-    }
-
-    Cart.findOneAndUpdate({ userId }, { items: [] })
-        .then((cart) => res.status(200).json({ msg: "items removed" }))
-        .catch((err) =>
-            res.status(400).json({ msg: "cart not found or not updated" })
-        );
 });
 
 module.exports = router;

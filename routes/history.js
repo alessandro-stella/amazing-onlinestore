@@ -3,13 +3,22 @@ const router = express.Router();
 
 const User = require("../models/userModel.js");
 const History = require("../models/historyModel");
+const Cart = require("../models/cartModel");
 
-class Order {
-    constructor(singleOrder) {
-        this.productId = singleOrder.productId;
-        this.productQuantity = singleOrder.quantityToBuy;
-        this.orderDate = new Date();
+const fastShippingDays = 1;
+const normalShippingDays = 3;
+
+function getDeliveryDate(fastShipping) {
+    let now = new Date();
+    let shippingDate = new Date();
+
+    if (fastShipping) {
+        shippingDate.setDate(now.getDate() + fastShippingDays);
+    } else {
+        shippingDate.setDate(now.getDate() + normalShippingDays);
     }
+
+    return new Date(shippingDate);
 }
 
 router.post("/getUserOrders", async (req, res, next) => {
@@ -42,7 +51,7 @@ router.post("/getUserOrders", async (req, res, next) => {
 });
 
 router.post("/addNewOrders", async (req, res, next) => {
-    const { userId, productsToAdd } = req.body;
+    const { userId, productsToAdd, shipmentInfo, fastShipping } = req.body;
 
     const user = User.findById(userId);
 
@@ -54,8 +63,16 @@ router.post("/addNewOrders", async (req, res, next) => {
         .then((orderHistory) => {
             let orders = orderHistory.orders;
 
-            productsToAdd.forEach((singleProduct) => {
-                orders.push(new Order(singleProduct));
+            productsToAdd.forEach((singleOrder) => {
+                let newOrder = {
+                    productId: singleOrder.productId,
+                    productQuantity: singleOrder.quantityToBuy,
+                    shipmentInfo: shipmentInfo,
+                    orderDate: new Date(),
+                    deliveryDate: getDeliveryDate(fastShipping),
+                };
+
+                orders.push(newOrder);
             });
 
             History.findOneAndUpdate(
@@ -69,9 +86,23 @@ router.post("/addNewOrders", async (req, res, next) => {
                             .json({ msg: "error during history update" });
                     }
 
-                    return res.status(200).json({
-                        msg: "user's order history updated successfully",
-                    });
+                    Cart.findOneAndUpdate(
+                        { userId },
+                        { items: [] },
+                        { new: true },
+                        (err, newCart) => {
+                            if (err) {
+                                return res.status(400).json({
+                                    msg: "error during cart emptying",
+                                });
+                            }
+
+                            return res.status(200).json({
+                                msg: "operation completed successfully",
+                                newCart,
+                            });
+                        }
+                    );
                 }
             );
         })

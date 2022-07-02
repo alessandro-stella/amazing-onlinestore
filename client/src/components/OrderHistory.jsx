@@ -6,6 +6,7 @@ import LoadingData from "./LoadingData";
 import NavBar from "./NavBar";
 import siteContext from "../siteContext";
 import OrderCard from "./OrderCard";
+import "../styles/orderHistory.css";
 
 function OrderHistory() {
     const navigate = useNavigate();
@@ -36,7 +37,16 @@ function OrderHistory() {
             <NavBar />
 
             <div className="user-page">
-                <h1>order history</h1>
+                <div className="title-container">
+                    <div className="title">order history</div>
+                    <Button
+                        size={isSmall ? "large" : "small"}
+                        style={{ minWidth: "30%" }}
+                        variant="contained"
+                        onClick={() => navigate("/userPage")}>
+                        go back
+                    </Button>
+                </div>
 
                 {purchases === "Loading..." ? (
                     <LoadingData />
@@ -56,14 +66,6 @@ function OrderHistory() {
                         )}
                     </>
                 )}
-
-                <Button
-                    size={isSmall ? "large" : "small"}
-                    style={{ minWidth: "30%" }}
-                    variant="contained"
-                    onClick={() => navigate("/userPage")}>
-                    go back
-                </Button>
             </div>
         </>
     );

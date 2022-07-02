@@ -95,6 +95,11 @@ function AlertMessage({ alertMessage }) {
                 tempAlertTitle = "Warning";
                 break;
 
+            case "Missing shipment info":
+                tempAlertSeverity = "warning";
+                tempAlertTitle = "Warning";
+                break;
+
             default:
                 tempAlertSeverity = "error";
                 tempAlertTitle = "Error";

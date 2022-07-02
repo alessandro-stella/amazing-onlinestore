@@ -49,8 +49,35 @@ router.post("/updateUserShipmentInfo", (req, res, next) => {
 
 router.post("/getUserSince", (req, res, next) => {
     User.findById(req.body.userId)
+        .then((user) => res.status(200).json({ userSince: user.registeredOn }))
+        .catch((err) => res.status(400).json({ msg: "user not found" }));
+});
+
+router.post("/getShipmentInfo", (req, res, next) => {
+    User.findById(req.body.userId)
         .then((user) => {
-            res.status(200).json({ userSince: user.registeredOn });
+            let shipmentInfo = user.shipmentInfo;
+            let allFull = true;
+
+            Object.keys(shipmentInfo)
+                .map((key) => shipmentInfo[key])
+                .forEach((singleProperty) => {
+                    if (!allFull) {
+                        return;
+                    }
+
+                    if (singleProperty === "") {
+                        allFull = false;
+                    }
+                });
+
+            if (!allFull) {
+                return res
+                    .status(400)
+                    .json({ msg: "shipment info not filled" });
+            }
+
+            return res.status(200).json({ shipmentInfo: user.shipmentInfo });
         })
         .catch((err) => res.status(400).json({ msg: "user not found" }));
 });

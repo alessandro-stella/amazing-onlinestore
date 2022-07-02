@@ -10,7 +10,7 @@ function LoadingData() {
                 <div></div>
             </div>
 
-            <div className="loading-data__text">Loading data...</div>
+            <div className="loading-data__text">Loading...</div>
         </div>
     );
 }
