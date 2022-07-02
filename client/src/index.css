@@ -18,7 +18,7 @@
     --dark-gray: #131921;
     --text-color: #0f1111;
 
-    --green: hsl(166, 93%, 48%);
+    --green: rgb(9, 236, 183);
     --green-light: hsl(166, 93%, 60%);
 
     --bottom-shadow: 0 0.2em 0.5em #ccc;
