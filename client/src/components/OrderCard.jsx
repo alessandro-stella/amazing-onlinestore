@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import LoadingData from "./LoadingData";
+import AlertMessage from "./AlertMessage";
 
 function OrderCard({ orderData }) {
     const months = [
@@ -31,8 +32,6 @@ function OrderCard({ orderData }) {
                 })
                 .then((res) => {
                     setProductData(res.data.product);
-                    formatDates(orderData.orderDate, orderData.deliveryDate);
-                    formatTime(orderData.orderDate);
                 })
                 .catch((err) => console.log(err));
         };
@@ -42,6 +41,9 @@ function OrderCard({ orderData }) {
         } else {
             setProductData(orderData.msg);
         }
+
+        formatDates(orderData.orderDate, orderData.deliveryDate);
+        formatTime(orderData.orderDate);
     }, []);
 
     function formatDates(orderDate, deliveryDate) {
@@ -93,32 +95,32 @@ function OrderCard({ orderData }) {
             {productData === "loading" ? (
                 <LoadingData />
             ) : (
-                <>
+                <div className="ordered-item">
                     {productData === "deleted-item" ? (
-                        <h1>Deleted item!</h1>
+                        <div className="deleted-item">
+                            <AlertMessage alertMessage="The seller has deleted this item" />
+                            <div>Order date: {orderDate}</div>
+                            <div>Delivery date: {deliveryDate}</div>
+                        </div>
                     ) : (
-                        <>
+                        <div>
+                            <div>Name: {productData.name}</div>
+                            <div>Time: {time}</div>
+                            <div>Order date: {orderDate}</div>
+                            <div>Delivery date: {deliveryDate}</div>
                             <div>
-                                <div>Name: {productData.name}</div>
-                                <div>Time: {time}</div>
-                                <div>Order date: {orderDate}</div>
-                                <div>Delivery date: {deliveryDate}</div>
-                                <div>
-                                    Quantity: {orderData.productQuantity} items
-                                </div>
-                                <div>
-                                    Total price:{" "}
-                                    {formatPrice(
-                                        productData.price *
-                                            orderData.productQuantity
-                                    )}
-                                </div>
+                                Quantity: {orderData.productQuantity} items
                             </div>
-
-                            <br />
-                        </>
+                            <div>
+                                Total price:{" "}
+                                {formatPrice(
+                                    productData.price *
+                                        orderData.productQuantity
+                                )}
+                            </div>
+                        </div>
                     )}
-                </>
+                </div>
             )}
         </>
     );

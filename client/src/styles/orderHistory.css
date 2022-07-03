@@ -1,11 +1,21 @@
 .title-container {
-    background-color: red;
-
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.title-container .title {
-    /* padding: 0; */
+.ordered-items__container {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.ordered-item .alert-message {
+    margin: 0 !important;
+}
+
+.ordered-item {
+    background-color: blueviolet;
+
+    padding: 1em;
 }

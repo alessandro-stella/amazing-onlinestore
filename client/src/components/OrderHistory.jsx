@@ -11,7 +11,7 @@ import "../styles/orderHistory.css";
 function OrderHistory() {
     const navigate = useNavigate();
     const { isSmall, userId } = useContext(siteContext);
-    const [purchases, setPurchases] = useState("Loading...");
+    const [purchases, setPurchases] = useState("loading");
 
     useEffect(() => {
         if (!userId) {
@@ -38,7 +38,7 @@ function OrderHistory() {
 
             <div className="user-page">
                 <div className="title-container">
-                    <div className="title">order history</div>
+                    <div className="title">Order history</div>
                     <Button
                         size={isSmall ? "large" : "small"}
                         style={{ minWidth: "30%" }}
@@ -48,21 +48,21 @@ function OrderHistory() {
                     </Button>
                 </div>
 
-                {purchases === "Loading..." ? (
+                {purchases === "loading" ? (
                     <LoadingData />
                 ) : (
                     <>
                         {purchases.length === 0 ? (
                             <h1>No purchases</h1>
                         ) : (
-                            <>
+                            <div className="ordered-items__container">
                                 {purchases.map((singlePurchase, index) => (
                                     <OrderCard
                                         key={index}
                                         orderData={singlePurchase}
                                     />
                                 ))}
-                            </>
+                            </div>
                         )}
                     </>
                 )}

@@ -3,6 +3,7 @@ const router = express.Router();
 
 const User = require("../models/userModel.js");
 const History = require("../models/historyModel");
+const Product = require("../models/productModel");
 const Cart = require("../models/cartModel");
 
 const fastShippingDays = 1;
@@ -52,7 +53,7 @@ router.post("/getUserOrders", async (req, res, next) => {
 
 router.post("/addNewOrders", async (req, res, next) => {
     const { userId, productsToAdd, shipmentInfo, fastShipping } = req.body;
-
+    console.log(req.body);
     const user = User.findById(userId);
 
     if (!user) {
@@ -90,17 +91,36 @@ router.post("/addNewOrders", async (req, res, next) => {
                         { userId },
                         { items: [] },
                         { new: true },
-                        (err, newCart) => {
+                        async (err, newCart) => {
                             if (err) {
                                 return res.status(400).json({
                                     msg: "error during cart emptying",
                                 });
                             }
 
-                            return res.status(200).json({
-                                msg: "operation completed successfully",
-                                newCart,
-                            });
+                            let ids = productsToAdd.map(
+                                (singleProduct) => singleProduct.productId
+                            );
+
+                            await Product.find({
+                                _id: { $in: ids },
+                            })
+                                .then((productsToUpdate) => {
+                                    productsToUpdate.sort((a, b) =>
+                                        ("" + b._id).localeCompare(a._id)
+                                    );
+
+                                    res.status(200).json({
+                                        msg: "operation completed successfully",
+                                        productsToUpdate,
+                                        ids,
+                                    });
+                                })
+                                .catch((err) =>
+                                    res.status(400).json({
+                                        msg: "error during product stock update",
+                                    })
+                                );
                         }
                     );
                 }

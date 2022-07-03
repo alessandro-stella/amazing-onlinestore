@@ -42,6 +42,10 @@ function App() {
     const mqlRatio = window.matchMedia("screen and (max-aspect-ratio: 1/2)");
 
     useEffect(() => {
+        if (!location.href.includes("checkoutPage")) {
+            localStorage.removeItem("completedCheckout");
+        }
+
         const browserIsMobile = checkMobileBrowser();
 
         if (browserIsMobile) {

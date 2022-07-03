@@ -71,6 +71,8 @@ router.post("/deleteProduct", (req, res, next) => {
                                                       msg: "deleted-item",
                                                       orderDate:
                                                           singleOrder.orderDate,
+                                                      deliveryDate:
+                                                          singleOrder.deliveryDate,
                                                   }
                                     );
 
