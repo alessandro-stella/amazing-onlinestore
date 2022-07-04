@@ -120,3 +120,7 @@
 .delete-item-alert {
     margin-top: 0.5em;
 }
+
+.no-products .alert-message {
+    margin: 0;
+}

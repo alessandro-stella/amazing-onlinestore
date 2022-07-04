@@ -100,7 +100,12 @@ function AlertMessage({ alertMessage }) {
                 tempAlertTitle = "Warning";
                 break;
 
-                case "The seller has deleted this item":
+            case "The seller has deleted this item":
+                tempAlertSeverity = "warning";
+                tempAlertTitle = "Warning";
+                break;
+
+            case "No products found with these criteria":
                 tempAlertSeverity = "warning";
                 tempAlertTitle = "Warning";
                 break;

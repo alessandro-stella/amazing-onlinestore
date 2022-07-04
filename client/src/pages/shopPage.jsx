@@ -20,11 +20,9 @@ function shopPage() {
     const [alertMessage, setAlertMessage] = useState("");
 
     const [productsDisplayed, setProductDisplayed] = useState(15);
+    const [loadingMoreProducts, setLoadingMoreProducts] = useState(false);
 
     const getProducts = () => {
-        document.querySelector("input").blur();
-        setSelectedCategory("All");
-
         if (searchKeyword === "") {
             axios
                 .post("/product/getAllProducts")
@@ -69,29 +67,50 @@ function shopPage() {
             scrolling = true;
         });
 
+        let scrolling = false;
+
+        let checkScrollInterval = setInterval(() => {
+            if (scrolling) {
+                scrolling = false;
+
+                let documentHeight = document.body.scrollHeight;
+                let currentScroll = window.scrollY + window.innerHeight;
+
+                if (currentScroll + 100 > documentHeight) {
+                    setLoadingMoreProducts(true);
+
+                    setTimeout(() => {
+                        setLoadingMoreProducts(false);
+
+                        setProductDisplayed(
+                            (productsDisplayed) => productsDisplayed + 3
+                        );
+                    }, 1500);
+                }
+            }
+        }, 300);
+
+        document.querySelector("input").blur();
+        setSelectedCategory("All");
+
         startTransition(() => {
             getProducts();
         });
 
         document.title = "Amazing - Shopping, as simple as it can get";
+
+        return () => {
+            window.clearInterval(checkScrollInterval);
+
+            window.removeEventListener("scroll", () => {
+                scrolling = true;
+            });
+        };
     }, []);
 
-    let scrolling = false;
-
-    setInterval(() => {
-        if (scrolling) {
-            scrolling = false;
-
-            let documentHeight = document.body.scrollHeight;
-            let currentScroll = window.scrollY + window.innerHeight;
-
-            if (currentScroll + 100 > documentHeight) {
-                setProductDisplayed(
-                    (productsDisplayed) => productsDisplayed + 3
-                );
-            }
-        }
-    }, 300);
+    useEffect(() => {
+        if (loadingMoreProducts) window.scrollTo(0, document.body.scrollHeight);
+    }, [loadingMoreProducts]);
 
     return (
         <>
@@ -123,11 +142,20 @@ function shopPage() {
                 ) : (
                     <>
                         {products !== "loadingError" ? (
-                            <ProductsContainer
-                                products={products}
-                                categoryFilter={selectedCategory}
-                                productsDisplayed={productsDisplayed}
-                            />
+                            <div className="product-container__scroller">
+                                <ProductsContainer
+                                    products={products}
+                                    categoryFilter={selectedCategory}
+                                    productsDisplayed={productsDisplayed}
+                                />
+
+                                {loadingMoreProducts &&
+                                    productsDisplayed < products.length && (
+                                        <div className="loading-more">
+                                            <LoadingData />
+                                        </div>
+                                    )}
+                            </div>
                         ) : (
                             <AlertMessage alertMessage={alertMessage} />
                         )}

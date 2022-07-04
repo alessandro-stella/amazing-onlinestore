@@ -18,7 +18,9 @@ function OrderHistory() {
     const navigate = useNavigate();
     const { isSmall, userId } = useContext(siteContext);
     const [purchases, setPurchases] = useState("loading");
-    const [renderedItems, setRenderedItems] = useState(10);
+
+    const [ordersDisplayed, setOrdersDisplayed] = useState(10);
+    const [loadingMoreOrders, setLoadingMoreOrders] = useState(false);
 
     useEffect(() => {
         if (!userId) {
@@ -38,6 +40,49 @@ function OrderHistory() {
             }
         }
     }, [userId]);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+
+        window.addEventListener("scroll", () => {
+            scrolling = true;
+        });
+
+        let scrolling = false;
+
+        let checkScrollInterval = setInterval(() => {
+            if (scrolling) {
+                scrolling = false;
+
+                let documentHeight = document.body.scrollHeight;
+                let currentScroll = window.scrollY + window.innerHeight;
+
+                if (currentScroll + 100 > documentHeight) {
+                    setLoadingMoreOrders(true);
+
+                    setTimeout(() => {
+                        setLoadingMoreOrders(false);
+
+                        setOrdersDisplayed(
+                            (ordersDisplayed) => ordersDisplayed + 5
+                        );
+                    }, 1500);
+                }
+            }
+        }, 300);
+
+        return () => {
+            window.clearInterval(checkScrollInterval);
+
+            window.removeEventListener("scroll", () => {
+                scrolling = true;
+            });
+        };
+    }, []);
+
+    useEffect(() => {
+        if (loadingMoreOrders) window.scrollTo(0, document.body.scrollHeight);
+    }, [loadingMoreOrders]);
 
     return (
         <>
@@ -65,13 +110,20 @@ function OrderHistory() {
                             <div className="ordered-items__container">
                                 {purchases.map(
                                     (singlePurchase, index) =>
-                                        index < renderedItems && (
+                                        index < ordersDisplayed && (
                                             <OrderCard
                                                 key={index}
                                                 orderData={singlePurchase}
                                             />
                                         )
                                 )}
+
+                                {loadingMoreOrders &&
+                                    ordersDisplayed < purchases.length && (
+                                        <div className="loading-more">
+                                            <LoadingData />
+                                        </div>
+                                    )}
                             </div>
                         )}
                     </>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "../styles/productsContainer.css";
+import AlertMessage from "./AlertMessage";
 import ProductCard from "./ProductCard";
 
 function ProductsContainer({
@@ -51,7 +52,9 @@ function ProductsContainer({
         <div className="products-container">
             {noMatches ? (
                 <div className="no-products">
-                    No products found with these criteria
+                    <AlertMessage
+                        alertMessage={"No products found with these criteria"}
+                    />
                 </div>
             ) : (
                 <>

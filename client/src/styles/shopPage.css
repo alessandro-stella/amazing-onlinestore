@@ -26,6 +26,14 @@
     width: fit-content;
 }
 
+.product-container__scroller {
+    width: 100%;
+}
+
+.product-container__scroller .loading-more {
+    padding-bottom: 3em;
+}
+
 @media screen and (min-width: 900px) {
     .MuiFormControlLabel-label {
         min-width: 25ch;
