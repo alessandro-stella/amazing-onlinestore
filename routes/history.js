@@ -53,7 +53,7 @@ router.post("/getUserOrders", async (req, res, next) => {
 
 router.post("/addNewOrders", async (req, res, next) => {
     const { userId, productsToAdd, shipmentInfo, fastShipping } = req.body;
-    console.log(req.body);
+
     const user = User.findById(userId);
 
     if (!user) {
@@ -61,7 +61,7 @@ router.post("/addNewOrders", async (req, res, next) => {
     }
 
     History.findOne({ userId })
-        .then((orderHistory) => {
+        .then(async (orderHistory) => {
             let orders = orderHistory.orders;
 
             productsToAdd.forEach((singleOrder) => {
@@ -76,55 +76,77 @@ router.post("/addNewOrders", async (req, res, next) => {
                 orders.push(newOrder);
             });
 
-            History.findOneAndUpdate(
-                { userId },
-                { orders },
-                { new: true },
-                (err, newHistory) => {
-                    if (err) {
-                        return res
-                            .status(400)
-                            .json({ msg: "error during history update" });
+            let ids = productsToAdd.map(
+                (singleProduct) => singleProduct.productId
+            );
+
+            await Product.find({
+                _id: { $in: ids },
+            })
+                .then((productsToUpdate) => {
+                    productsToUpdate.sort((a, b) =>
+                        ("" + b._id).localeCompare(a._id)
+                    );
+
+                    productsToAdd.sort((a, b) =>
+                        ("" + b.productId).localeCompare(a.productId)
+                    );
+
+                    for (let i = 0; i < productsToAdd.length; i++) {
+                        if (
+                            productsToAdd[i].quantityToBuy >
+                            productsToUpdate[i].inStock
+                        ) {
+                            return res.status(400).json({
+                                msg: "not enough items in stock",
+                            });
+                        } else {
+                            productsToUpdate[i].inStock -=
+                                productsToAdd[i].quantityToBuy;
+                            productsToUpdate[i].markModified("inStock");
+                            productsToUpdate[i].save(function (err) {
+                                if (err !== null) {
+                                    return res.status(400).json({
+                                        msg: "error during item stock update",
+                                    });
+                                }
+                            });
+                        }
                     }
 
-                    Cart.findOneAndUpdate(
+                    History.findOneAndUpdate(
                         { userId },
-                        { items: [] },
+                        { orders },
                         { new: true },
-                        async (err, newCart) => {
+                        (err, newHistory) => {
                             if (err) {
-                                return res.status(400).json({
-                                    msg: "error during cart emptying",
-                                });
+                                return res
+                                    .status(400)
+                                    .json({
+                                        msg: "error during history update",
+                                    });
                             }
 
-                            let ids = productsToAdd.map(
-                                (singleProduct) => singleProduct.productId
-                            );
-
-                            await Product.find({
-                                _id: { $in: ids },
-                            })
-                                .then((productsToUpdate) => {
-                                    productsToUpdate.sort((a, b) =>
-                                        ("" + b._id).localeCompare(a._id)
-                                    );
-
+                            Cart.findOneAndUpdate({ userId }, { items: [] })
+                                .then((newCart) =>
                                     res.status(200).json({
                                         msg: "operation completed successfully",
-                                        productsToUpdate,
-                                        ids,
-                                    });
-                                })
-                                .catch((err) =>
-                                    res.status(400).json({
-                                        msg: "error during product stock update",
                                     })
-                                );
+                                )
+                                .catch((err) => {
+                                    console.log(err);
+                                    res.status(400).json({
+                                        msg: "error error during cart emptying",
+                                    });
+                                });
                         }
                     );
-                }
-            );
+                })
+                .catch((err) => {
+                    return res
+                        .status(400)
+                        .json({ msg: "one or more items not found" });
+                });
         })
         .catch((err) => {
             return res

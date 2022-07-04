@@ -19,41 +19,7 @@ function shopPage() {
 
     const [alertMessage, setAlertMessage] = useState("");
 
-    function orderProducts(products) {
-        products.sort((a, b) => {
-            if (a.category > b.category) {
-                return 1;
-            }
-
-            if (b.category > a.category) {
-                return -1;
-            }
-
-            if (a.category === b.category) {
-                if (a.name > b.name) {
-                    return 1;
-                }
-
-                if (b.name > a.name) {
-                    return -1;
-                }
-
-                if (a.name === b.name) {
-                    if (a.price > b.price) {
-                        return 1;
-                    }
-
-                    if (b.price > a.price) {
-                        return -1;
-                    }
-                }
-            }
-
-            return 0;
-        });
-
-        setProducts(products);
-    }
+    const [productsDisplayed, setProductDisplayed] = useState(15);
 
     const getProducts = () => {
         document.querySelector("input").blur();
@@ -63,7 +29,11 @@ function shopPage() {
             axios
                 .post("/product/getAllProducts")
                 .then((res) => {
-                    orderProducts(res.data.products);
+                    if (products === "loading") {
+                        setProducts(res.data.products);
+                    } else {
+                        setProducts([...products, ...res.data.products]);
+                    }
                 })
                 .catch((err) => {
                     setProducts("loadingError");
@@ -75,7 +45,11 @@ function shopPage() {
             axios
                 .post("/product/getProductsByName", { keyword: searchKeyword })
                 .then((res) => {
-                    orderProducts(res.data.products);
+                    if (products === "loading") {
+                        setProducts(res.data.products);
+                    } else {
+                        setProducts([...products, ...res.data.products]);
+                    }
                 })
                 .catch((err) => {
                     setProducts("loadingError");
@@ -89,12 +63,35 @@ function shopPage() {
     };
 
     useEffect(() => {
+        window.scrollTo(0, 0);
+
+        window.addEventListener("scroll", () => {
+            scrolling = true;
+        });
+
         startTransition(() => {
             getProducts();
         });
 
         document.title = "Amazing - Shopping, as simple as it can get";
     }, []);
+
+    let scrolling = false;
+
+    setInterval(() => {
+        if (scrolling) {
+            scrolling = false;
+
+            let documentHeight = document.body.scrollHeight;
+            let currentScroll = window.scrollY + window.innerHeight;
+
+            if (currentScroll + 100 > documentHeight) {
+                setProductDisplayed(
+                    (productsDisplayed) => productsDisplayed + 3
+                );
+            }
+        }
+    }, 300);
 
     return (
         <>
@@ -129,6 +126,7 @@ function shopPage() {
                             <ProductsContainer
                                 products={products}
                                 categoryFilter={selectedCategory}
+                                productsDisplayed={productsDisplayed}
                             />
                         ) : (
                             <AlertMessage alertMessage={alertMessage} />

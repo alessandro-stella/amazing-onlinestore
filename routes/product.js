@@ -122,11 +122,13 @@ router.post("/updateItemStock", (req, res, next) => {
         .catch((err) => res.status(400).json({ msg: "product not found" }));
 });
 
-router.post("/getAllProducts", (req, res, next) => {
+router.post("/getAllProducts", async (req, res, next) => {
+    const { skip, limit } = req.body;
+
     Product.find({})
         .then((products) => res.status(200).json({ products }))
         .catch((err) =>
-            res.status(400).json({ msg: "error during all product fetching" })
+            res.status(400).json({ msg: "error during product fetching" })
         );
 });
 

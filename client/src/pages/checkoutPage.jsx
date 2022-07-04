@@ -34,6 +34,14 @@ function checkoutPage() {
 
     const [completedOrder, setCompletedOrder] = useState("");
 
+    /* useEffect(() => {
+        window.addEventListener("scroll", (e) => console.log(e));
+
+        return () => {
+            window.removeEventListener("scroll", (e) => console.log(e));
+        };
+    }, []); */
+
     useEffect(() => {
         if (completedCheckout === "true") {
             localStorage.removeItem("completedCheckout");

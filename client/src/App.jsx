@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import siteContext from "./siteContext";
 
@@ -40,6 +40,19 @@ function App() {
 
     const mqlWidth = window.matchMedia("screen and (min-width: 900px)");
     const mqlRatio = window.matchMedia("screen and (max-aspect-ratio: 1/2)");
+
+    const listInnerRef = useRef();
+    const onScroll = () => {
+        console.log("scrolling");
+
+        if (listInnerRef.current) {
+            const { scrollTop, scrollHeight, clientHeight } =
+                listInnerRef.current;
+            if (scrollTop + clientHeight === scrollHeight) {
+                console.log("reached bottom");
+            }
+        }
+    };
 
     useEffect(() => {
         if (!location.href.includes("checkoutPage")) {

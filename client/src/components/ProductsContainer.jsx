@@ -8,6 +8,7 @@ function ProductsContainer({
     getProducts,
     isSeller,
     disableClick,
+    productsDisplayed,
 }) {
     const [noMatches, setNoMatches] = useState(false);
     const [filteredProducts, setFilteredProducts] = useState([]);
@@ -54,17 +55,35 @@ function ProductsContainer({
                 </div>
             ) : (
                 <>
-                    {filteredProducts.map((singleProduct) => (
-                        <ProductCard
-                            key={singleProduct._id}
-                            props={{
-                                ...singleProduct,
-                                isSeller,
-                                disableClick,
-                                getProducts,
-                            }}
-                        />
-                    ))}
+                    {filteredProducts.map((singleProduct, index) => {
+                        if (!productsDisplayed) {
+                            return (
+                                <ProductCard
+                                    key={singleProduct._id}
+                                    props={{
+                                        ...singleProduct,
+                                        isSeller,
+                                        disableClick,
+                                        getProducts,
+                                    }}
+                                />
+                            );
+                        }
+
+                        return (
+                            index + 1 <= productsDisplayed && (
+                                <ProductCard
+                                    key={singleProduct._id}
+                                    props={{
+                                        ...singleProduct,
+                                        isSeller,
+                                        disableClick,
+                                        getProducts,
+                                    }}
+                                />
+                            )
+                        );
+                    })}
                 </>
             )}
         </div>

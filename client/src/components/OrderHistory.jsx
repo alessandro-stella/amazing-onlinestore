@@ -1,6 +1,12 @@
 import { Button } from "@mui/material";
 import axios from "axios";
-import { startTransition, useContext, useEffect, useState } from "react";
+import {
+    startTransition,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 import { useNavigate } from "react-router-dom";
 import LoadingData from "./LoadingData";
 import NavBar from "./NavBar";
@@ -12,6 +18,7 @@ function OrderHistory() {
     const navigate = useNavigate();
     const { isSmall, userId } = useContext(siteContext);
     const [purchases, setPurchases] = useState("loading");
+    const [renderedItems, setRenderedItems] = useState(10);
 
     useEffect(() => {
         if (!userId) {
@@ -56,12 +63,15 @@ function OrderHistory() {
                             <h1>No purchases</h1>
                         ) : (
                             <div className="ordered-items__container">
-                                {purchases.map((singlePurchase, index) => (
-                                    <OrderCard
-                                        key={index}
-                                        orderData={singlePurchase}
-                                    />
-                                ))}
+                                {purchases.map(
+                                    (singlePurchase, index) =>
+                                        index < renderedItems && (
+                                            <OrderCard
+                                                key={index}
+                                                orderData={singlePurchase}
+                                            />
+                                        )
+                                )}
                             </div>
                         )}
                     </>
