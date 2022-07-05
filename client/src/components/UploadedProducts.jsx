@@ -16,6 +16,9 @@ function UploadedProducts() {
     const [products, setProducts] = useState("loading");
     const [alertMessage, setAlertMessage] = useState("");
 
+    const [productsDisplayed, setProductDisplayed] = useState(15);
+    const [loadingMoreProducts, setLoadingMoreProducts] = useState(false);
+
     useEffect(() => {
         if (!userId) {
             navigate("/loginPage");
@@ -25,6 +28,49 @@ function UploadedProducts() {
         document.title = "Amazing - Your shop";
         setSearchKeyword("");
     }, []);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+
+        window.addEventListener("scroll", () => {
+            scrolling = true;
+        });
+
+        let scrolling = false;
+
+        let checkScrollInterval = setInterval(() => {
+            if (scrolling) {
+                scrolling = false;
+
+                let documentHeight = document.body.scrollHeight;
+                let currentScroll = window.scrollY + window.innerHeight;
+
+                if (currentScroll + 100 > documentHeight) {
+                    setLoadingMoreProducts(true);
+
+                    setTimeout(() => {
+                        setLoadingMoreProducts(false);
+
+                        setProductDisplayed(
+                            (productsDisplayed) => productsDisplayed + 5
+                        );
+                    }, 1000);
+                }
+            }
+        }, 300);
+
+        return () => {
+            window.clearInterval(checkScrollInterval);
+
+            window.removeEventListener("scroll", () => {
+                scrolling = true;
+            });
+        };
+    }, []);
+
+    useEffect(() => {
+        if (loadingMoreProducts) window.scrollTo(0, document.body.scrollHeight);
+    }, [loadingMoreProducts]);
 
     useEffect(() => {
         if (!userId) {
@@ -75,12 +121,25 @@ function UploadedProducts() {
                         ) : (
                             <>
                                 {products.length > 0 ? (
-                                    <ProductsContainer
-                                        products={products}
-                                        getProducts={getProducts}
-                                        isSeller={true}
-                                        disableClick={true}
-                                    />
+                                    <>
+                                        <ProductsContainer
+                                            products={products}
+                                            getProducts={getProducts}
+                                            isSeller={true}
+                                            disableClick={true}
+                                            productsDisplayed={
+                                                productsDisplayed
+                                            }
+                                        />
+
+                                        {loadingMoreProducts &&
+                                            productsDisplayed <
+                                                products.length && (
+                                                <div className="loading-more">
+                                                    <LoadingData />
+                                                </div>
+                                            )}
+                                    </>
                                 ) : (
                                     <div className="no-products">
                                         You don't have any products uploaded,

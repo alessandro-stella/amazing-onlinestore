@@ -19,6 +19,52 @@ function sellerPage() {
     const [products, setProducts] = useState("Loading...");
     const [sellerId, setSellerId] = useState("");
 
+    const [productsDisplayed, setProductDisplayed] = useState(15);
+    const [loadingMoreProducts, setLoadingMoreProducts] = useState(false);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+
+        window.addEventListener("scroll", () => {
+            scrolling = true;
+        });
+
+        let scrolling = false;
+
+        let checkScrollInterval = setInterval(() => {
+            if (scrolling) {
+                scrolling = false;
+
+                let documentHeight = document.body.scrollHeight;
+                let currentScroll = window.scrollY + window.innerHeight;
+
+                if (currentScroll + 100 > documentHeight) {
+                    setLoadingMoreProducts(true);
+
+                    setTimeout(() => {
+                        setLoadingMoreProducts(false);
+
+                        setProductDisplayed(
+                            (productsDisplayed) => productsDisplayed + 5
+                        );
+                    }, 1000);
+                }
+            }
+        }, 300);
+
+        return () => {
+            window.clearInterval(checkScrollInterval);
+
+            window.removeEventListener("scroll", () => {
+                scrolling = true;
+            });
+        };
+    }, []);
+
+    useEffect(() => {
+        if (loadingMoreProducts) window.scrollTo(0, document.body.scrollHeight);
+    }, [loadingMoreProducts]);
+
     useEffect(() => {
         const getData = async () => {
             axios
@@ -73,7 +119,19 @@ function sellerPage() {
                                 </Button>
                             </div>
                         ) : (
-                            <ProductsContainer products={products} />
+                            <>
+                                <ProductsContainer
+                                    products={products}
+                                    productsDisplayed={productsDisplayed}
+                                />
+
+                                {loadingMoreProducts &&
+                                    productsDisplayed < products.length && (
+                                        <div className="loading-more">
+                                            <LoadingData />
+                                        </div>
+                                    )}
+                            </>
                         )}
                     </>
                 )}

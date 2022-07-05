@@ -100,6 +100,8 @@ function checkoutPage() {
     }, [userId]);
 
     useEffect(() => {
+        console.log(productsToBuy);
+
         if (productsToBuy === "Loading...") {
             return;
         }
@@ -285,6 +287,7 @@ function checkoutPage() {
                         navigate(0);
                     })
                     .catch((err) => {
+                        console.dir(err);
                         setCompletedOrder("error");
                     });
             })

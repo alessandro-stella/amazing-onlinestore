@@ -66,7 +66,7 @@ function OrderHistory() {
                         setOrdersDisplayed(
                             (ordersDisplayed) => ordersDisplayed + 5
                         );
-                    }, 1500);
+                    }, 1000);
                 }
             }
         }, 300);

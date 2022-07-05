@@ -85,7 +85,7 @@ function shopPage() {
                         setProductDisplayed(
                             (productsDisplayed) => productsDisplayed + 3
                         );
-                    }, 1500);
+                    }, 1000);
                 }
             }
         }, 300);
