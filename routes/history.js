@@ -163,10 +163,21 @@ router.post("/addNewOrders", async (req, res, next) => {
                         })
                     );
 
+                    let shipmentInfo;
+
+                    await User.findById(userId)
+                        .then((user) => {
+                            shipmentInfo = user.shipmentInfo;
+                        })
+                        .catch((err) =>
+                            res.status(400).json({ msg: "user not found" })
+                        );
+
                     await Cart.findOneAndUpdate({ userId }, { items: [] })
                         .then(() =>
                             res.status(200).json({
                                 msg: "operation completed successfully",
+                                shipmentInfo,
                             })
                         )
                         .catch((err) =>

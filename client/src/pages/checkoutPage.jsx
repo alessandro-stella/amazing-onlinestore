@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import AlertMessage from "../components/AlertMessage";
 import { CartProduct as ProductCard } from "../components/CartProduct";
+import CompletedCheckout from "../components/CompletedCheckout";
 import LoadingData from "../components/LoadingData";
 import NavBar from "../components/NavBar";
 import PaymentMethods from "../components/PaymentMethods";
@@ -16,8 +17,12 @@ function checkoutPage() {
     const navigate = useNavigate();
 
     const { userId } = useContext(siteContext);
+
     const [completedCheckout, setCompletedCheckout] = useState(
         localStorage.getItem("completedCheckout")
+    );
+    const [orderInfo, setOrderInfo] = useState(
+        JSON.parse(localStorage.getItem("orderInfo"))
     );
 
     const [productsToBuy, setProductsToBuy] = useState("Loading...");
@@ -39,10 +44,16 @@ function checkoutPage() {
     }, []);
 
     useEffect(() => {
-        if (completedCheckout === "true") {
+        if (completedCheckout) {
             localStorage.removeItem("completedCheckout");
         }
     }, [completedCheckout]);
+
+    useEffect(() => {
+        if (orderInfo) {
+            localStorage.removeItem("orderInfo");
+        }
+    }, [orderInfo]);
 
     useEffect(() => {
         if (!userId) {
@@ -100,8 +111,6 @@ function checkoutPage() {
     }, [userId]);
 
     useEffect(() => {
-        console.log(productsToBuy);
-
         if (productsToBuy === "Loading...") {
             return;
         }
@@ -174,8 +183,13 @@ function checkoutPage() {
         removeItems();
     }
 
-    function updateTotal(newQuantity) {
+    function updateTotal(newQuantity, reloadPage) {
         setTotal("Loading...");
+
+        if (reloadPage) {
+            navigate(0);
+            return;
+        }
 
         const updateTotal = async () => {
             await axios
@@ -284,11 +298,31 @@ function checkoutPage() {
                     })
                     .then((res) => {
                         localStorage.setItem("completedCheckout", true);
+                        localStorage.setItem(
+                            "orderInfo",
+                            JSON.stringify({
+                                shipmentInfo: JSON.stringify(
+                                    res.data.shipmentInfo
+                                ),
+                                totalPayment: total,
+                            })
+                        );
                         navigate(0);
                     })
                     .catch((err) => {
-                        console.dir(err);
-                        setCompletedOrder("error");
+                        if (
+                            err.response.data.msg ===
+                            "not enough items in stock"
+                        ) {
+                            setCheckoutError(
+                                "It seems that, for one or more products, you want to buy more units than the seller has in their inventory. Double check the quantities and try again"
+                            );
+                            resetCheckoutAlert();
+
+                            setCompletedOrder("");
+                        } else {
+                            setCompletedOrder("error");
+                        }
                     });
             })
             .catch((err) => {
@@ -301,9 +335,12 @@ function checkoutPage() {
         <>
             <NavBar />
 
-            <div className="checkout-page">
+            <div
+                className={`checkout-page${
+                    completedCheckout ? " completed" : ""
+                }`}>
                 {completedCheckout ? (
-                    <div className="completed-order"> Completed order </div>
+                    <CompletedCheckout orderInfo={orderInfo} />
                 ) : (
                     <>
                         {" "}
@@ -402,6 +439,9 @@ function checkoutPage() {
                                                             updateTotal={
                                                                 updateTotal
                                                             }
+                                                            isCheckoutItem={
+                                                                true
+                                                            }
                                                         />
                                                     ) : (
                                                         <>
@@ -424,6 +464,9 @@ function checkoutPage() {
                                                                         }
                                                                         updateTotal={
                                                                             updateTotal
+                                                                        }
+                                                                        isCheckoutItem={
+                                                                            true
                                                                         }
                                                                     />
                                                                 )

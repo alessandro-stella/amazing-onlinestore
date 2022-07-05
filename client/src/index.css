@@ -17,6 +17,7 @@
 :root {
     --dark-gray: #131921;
     --text-color: #0f1111;
+    --faded-text: #0f111180;
 
     --green: rgb(9, 236, 183);
     --green-light: hsl(166, 93%, 60%);

@@ -12,6 +12,7 @@ export function CartProduct({
     cartProductData,
     removeItem,
     updateTotal,
+    isCheckoutItem,
 }) {
     const navigate = useNavigate();
 
@@ -81,7 +82,7 @@ export function CartProduct({
                 getProductData();
 
                 if (hasLoaded) {
-                    updateTotal(quantityToBuy);
+                    updateTotal(quantityToBuy, isCheckoutItem);
                 }
 
                 setHasLoaded((hasLoaded) => (hasLoaded = true));
