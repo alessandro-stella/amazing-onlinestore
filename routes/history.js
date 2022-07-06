@@ -6,6 +6,8 @@ const History = require("../models/historyModel");
 const Product = require("../models/productModel");
 const Cart = require("../models/cartModel");
 
+const sendEmail = require("../utils/sendMail");
+
 const fastShippingDays = 1;
 const normalShippingDays = 3;
 
@@ -195,6 +197,37 @@ router.post("/addNewOrders", async (req, res, next) => {
                 .status(400)
                 .json({ msg: "user's order history not found" });
         });
+});
+
+router.post("/sendSummaryEmail", async (req, res, next) => {
+    const { userId, shipmentInfo, totalPayment } = req.body;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+        return res.status(400).json({ msg: "user not found" });
+    }
+
+    const emailSubject = "Amazing - Thanks for your purchase!";
+
+    try {
+        sendEmail(
+            {
+                to: user.email,
+                subject: emailSubject,
+                shipmentInfo,
+                totalPayment,
+            },
+            "orderSummary"
+        );
+
+        return res.status(200).json({ success: true, msg: "email sent" });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            msg: "error during email sending",
+        });
+    }
 });
 
 module.exports = router;

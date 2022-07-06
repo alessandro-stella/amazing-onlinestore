@@ -85,12 +85,15 @@ router.post("/sendWelcomeEmail", async (req, res, next) => {
     const emailSubject = `Amazing - ${username}, we're glad you're joining us!`;
 
     try {
-        sendEmail({
-            to: userEmail,
-            subject: emailSubject,
-            username: username,
-            deleteAccountToken,
-        });
+        sendEmail(
+            {
+                to: userEmail,
+                subject: emailSubject,
+                username: username,
+                deleteAccountToken,
+            },
+            "welcomeEmail"
+        );
 
         res.status(200).json({ success: true, msg: "Email sent" });
     } catch (error) {

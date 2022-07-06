@@ -155,17 +155,20 @@ router.post("/sendResetEmail", async (req, res, next) => {
     const emailSubject = "Amazing - Request for password reset";
 
     try {
-        sendEmail({
-            to: userEmail,
-            subject: emailSubject,
-            resetPasswordToken,
-        });
+        sendEmail(
+            {
+                to: userEmail,
+                subject: emailSubject,
+                resetPasswordToken,
+            },
+            "resetPassword"
+        );
 
-        res.status(200).json({ success: true, msg: "Email sent" });
+        res.status(200).json({ success: true, msg: "email sent" });
     } catch (error) {
         res.status(500).json({
             success: false,
-            msg: "Error during email sending",
+            msg: "error during email sending",
         });
     }
 });
