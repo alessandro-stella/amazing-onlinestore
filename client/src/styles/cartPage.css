@@ -195,6 +195,11 @@
     display: none;
 }
 
+.blockClick {
+    pointer-events: none;
+    color: var(--faded-text);
+}
+
 @media screen and (min-width: 900px) {
     .cart-page__main {
         flex-direction: row;

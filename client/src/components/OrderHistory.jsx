@@ -42,6 +42,8 @@ function OrderHistory() {
     }, [userId]);
 
     useEffect(() => {
+        document.title = "Amazing - Your order history"
+
         window.scrollTo(0, 0);
 
         window.addEventListener("scroll", () => {

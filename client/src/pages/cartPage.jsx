@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import siteContext from "../siteContext";
@@ -20,6 +20,11 @@ function cartPage() {
 
     const [total, setTotal] = useState("Loading...");
     const [displayError, setDisplayError] = useState(false);
+
+    const [isPrintable, setIsPrintable] = useState(false);
+    const [itemsToPrint, setItemsToPrint] = useState("");
+
+    const cartItemsRef = useRef(null);
 
     useEffect(() => {
         if (!userId) {
@@ -75,6 +80,32 @@ function cartPage() {
             return;
         }
 
+        setTimeout(() => {
+            let itemsContainerCopy = cartItemsRef.current.cloneNode(true);
+
+            let allToDelete = [
+                ...Array.from(
+                    itemsContainerCopy.getElementsByClassName(
+                        "item-quantity__container"
+                    )
+                ),
+                ...Array.from(
+                    itemsContainerCopy.getElementsByClassName("item-subtotal")
+                ),
+            ];
+
+            allToDelete.forEach((singleDiv) => singleDiv.remove());
+
+            setItemsToPrint(itemsContainerCopy);
+            setIsPrintable(true);
+        }, 3000);
+    }, [items]);
+
+    useEffect(() => {
+        if (items === "loading") {
+            return;
+        }
+
         const getCorrelated = async () => {
             await axios
                 .post("/product/getCorrelatedProducts", {
@@ -116,6 +147,184 @@ function cartPage() {
         return tempPrice;
     }
 
+    function printCart() {
+        let htmlToPrint = `<style type="text/css">
+        * {
+            print-color-adjust: exact;
+            -webkit-print-color-adjust: exact !important; /* Chrome, Safari, Edge */
+            color-adjust: exact !important;
+        }
+
+        .item-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 1em;
+            --bottom-shadow: 0 0.2em 0.5em #ccc;
+
+            width: fit-content
+        }
+        
+        .item-container__outer {
+            box-shadow: var(--bottom-shadow);
+        
+            display: flex;
+            flex-direction: column;
+        
+            border-radius: 0.5em;
+        
+            padding: 1em;
+        }
+        
+        .item-container__outer .MuiAlert-root {
+            margin-top: 0.5em;
+        }
+        
+        .item-container {
+            display: flex;
+            flex-direction: row;
+            gap: 1em;
+        
+            position: relative;
+        }
+        
+        .item-data__container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5em;
+        
+            flex: 1;
+            height: fit-content;
+        }
+        
+        .item-image {
+            margin: auto 0;
+            height: 10em;
+            width: calc(35% - 1em);
+            aspect-ratio: 1/1;
+        
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
+        
+        .item-name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        
+            font-size: 1.5em;
+        }
+        
+        .item-quantity__container {
+            position: relative;
+        }
+        
+        .item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+        
+            margin-top: 0.5em;
+        }
+        
+        .update-button {
+            margin-top: 0.5em;
+        }
+        
+        .item-price {
+            font-size: 1.5em;
+        
+            display: flex;
+        }
+        
+        .item-price__symbol {
+            height: min-content;
+            font-size: 0.5em;
+            line-height: 100%;
+            padding-top: 0.2em;
+        }
+        
+        .remove-item {
+            text-decoration: none;
+            margin-left: 0.5em;
+        
+            position: relative;
+        }
+        
+        .remove-item::before {
+            background-color: #bbb;
+            width: 1px;
+            height: 100%;
+        
+            content: "";
+            position: absolute;
+            left: calc(-0.5em + 0.5px);
+            top: 0;
+        }
+        
+        .remove-item:after {
+            background-color: transparent;
+            width: 100%;
+            height: 1px;
+        
+            content: "";
+            position: absolute;
+            bottom: 1.6px;
+            right: 0;
+        
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .remove-item:hover:after {
+            background-color: var(--green);
+        }
+        
+        .alert-not-rounded {
+            border-bottom-left-radius: 0 !important;
+            border-bottom-right-radius: 0 !important;
+        }
+        
+        .cart-page .button-group * {
+            border-top-right-radius: 0 !important;
+            border-top-left-radius: 0 !important;
+        }
+        
+        .item-subtotal {
+            text-align: end;
+            position: relative;
+        
+            margin-top: 1em;
+        }
+        
+        .item-subtotal::before {
+            background-color: #bbb;
+            width: 100%;
+            height: 0.5px;
+        
+            content: "";
+            position: absolute;
+            top: calc(-0.5em + 0.5px);
+            left: 0;
+        }
+        
+        .cart-page .correlated-products,
+        .correlated-products__title {
+            display: none;
+        }
+        </style><div class="item-layout">`;
+
+        htmlToPrint += itemsToPrint.innerHTML;
+        htmlToPrint += "</div>";
+
+        let windowToPrint = window.open("");
+        windowToPrint.document.write(htmlToPrint);
+
+        windowToPrint.print();
+        windowToPrint.close();
+    }
+
     return (
         <>
             <NavBar />
@@ -135,7 +344,9 @@ function cartPage() {
                                 </div>
                             ) : (
                                 <>
-                                    <div className="item-layout">
+                                    <div
+                                        className="item-layout"
+                                        ref={cartItemsRef}>
                                         {items.map((singleItem) => (
                                             <CartProduct
                                                 key={singleItem.productId}
@@ -154,6 +365,17 @@ function cartPage() {
                                                 items):{" "}
                                                 <strong>${total}</strong>
                                             </div>
+
+                                            <a
+                                                className={`${
+                                                    !isPrintable
+                                                        ? "blockClick"
+                                                        : ""
+                                                }`}
+                                                onClick={() => printCart()}>
+                                                Print cart items
+                                            </a>
+
                                             {displayError && (
                                                 <AlertMessage alertMessage="There's been an error during the process, please try again" />
                                             )}

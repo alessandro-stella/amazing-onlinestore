@@ -12,6 +12,23 @@
     outline: none;
 
     font-family: amazonEmber, Arial, Helvetica, sans-serif;
+
+    scrollbar-width: auto;
+    scrollbar-color: #09ecb7 #131921;
+}
+
+*::-webkit-scrollbar {
+    width: 16px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #131921;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #09ecb7;
+    border-radius: 10px;
+    border: 2px solid #131921;
 }
 
 :root {

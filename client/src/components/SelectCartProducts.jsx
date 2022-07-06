@@ -67,7 +67,7 @@ function SelectProductQuantity({
                         onChange={(e) => checkQuantity(e.target.value)}
                     />
                 ) : (
-                    <FormControl size="small">
+                    <FormControl size="small" className="select-quantity">
                         <Select
                             value={localQuantity}
                             onChange={(e) => checkQuantity(e.target.value)}>
