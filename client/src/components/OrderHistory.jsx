@@ -1,18 +1,13 @@
 import { Button } from "@mui/material";
 import axios from "axios";
-import {
-    startTransition,
-    useContext,
-    useEffect,
-    useRef,
-    useState,
-} from "react";
+import { startTransition, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoadingData from "./LoadingData";
 import NavBar from "./NavBar";
 import siteContext from "../siteContext";
 import OrderCard from "./OrderCard";
 import "../styles/orderHistory.css";
+import AlertMessage from "./AlertMessage";
 
 function OrderHistory() {
     const navigate = useNavigate();
@@ -22,27 +17,10 @@ function OrderHistory() {
     const [ordersDisplayed, setOrdersDisplayed] = useState(10);
     const [loadingMoreOrders, setLoadingMoreOrders] = useState(false);
 
-    useEffect(() => {
-        if (!userId) {
-            navigate("/loginPage");
-        } else {
-            if (userId.length <= 24) {
-                startTransition(() => {
-                    axios
-                        .post("/history/getUserOrders", {
-                            userId,
-                        })
-                        .then((res) => {
-                            setPurchases(res.data.orders);
-                        })
-                        .catch((err) => console.log(err));
-                });
-            }
-        }
-    }, [userId]);
+    const [alertMessage, setAlertMessage] = useState("");
 
     useEffect(() => {
-        document.title = "Amazing - Your order history"
+        document.title = "Amazing - Your order history";
 
         window.scrollTo(0, 0);
 
@@ -83,6 +61,29 @@ function OrderHistory() {
     }, []);
 
     useEffect(() => {
+        if (!userId) {
+            navigate("/loginPage");
+        } else {
+            if (userId.length <= 24) {
+                startTransition(() => {
+                    axios
+                        .post("/history/getUserOrders", {
+                            userId,
+                        })
+                        .then((res) => {
+                            setPurchases(res.data.orders);
+                        })
+                        .catch((err) =>
+                            setAlertMessage(
+                                "There's been an error during the process, please try again"
+                            )
+                        );
+                });
+            }
+        }
+    }, [userId]);
+
+    useEffect(() => {
         if (loadingMoreOrders) window.scrollTo(0, document.body.scrollHeight);
     }, [loadingMoreOrders]);
 
@@ -102,31 +103,41 @@ function OrderHistory() {
                     </Button>
                 </div>
 
-                {purchases === "loading" ? (
-                    <LoadingData />
+                {alertMessage ? (
+                    <AlertMessage alertMessage={alertMessage} />
                 ) : (
                     <>
-                        {purchases.length === 0 ? (
-                            <h1>No purchases</h1>
+                        {purchases === "loading" ? (
+                            <LoadingData />
                         ) : (
-                            <div className="ordered-items__container">
-                                {purchases.map(
-                                    (singlePurchase, index) =>
-                                        index < ordersDisplayed && (
-                                            <OrderCard
-                                                key={index}
-                                                orderData={singlePurchase}
-                                            />
-                                        )
-                                )}
+                            <>
+                                {purchases.length === 0 ? (
+                                    <h1>No purchases</h1>
+                                ) : (
+                                    <div className="ordered-items__container">
+                                        {purchases.map(
+                                            (singlePurchase, index) =>
+                                                index < ordersDisplayed && (
+                                                    <OrderCard
+                                                        key={index}
+                                                        orderData={
+                                                            singlePurchase
+                                                        }
+                                                        orderIndex={index}
+                                                    />
+                                                )
+                                        )}
 
-                                {loadingMoreOrders &&
-                                    ordersDisplayed < purchases.length && (
-                                        <div className="loading-more">
-                                            <LoadingData />
-                                        </div>
-                                    )}
-                            </div>
+                                        {loadingMoreOrders &&
+                                            ordersDisplayed <
+                                                purchases.length && (
+                                                <div className="loading-more">
+                                                    <LoadingData />
+                                                </div>
+                                            )}
+                                    </div>
+                                )}
+                            </>
                         )}
                     </>
                 )}
