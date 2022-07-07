@@ -30,7 +30,6 @@ app.use("/api/cart", require("./routes/cart"));
 app.use("/api/history", require("./routes/history"));
 app.use("/api/product", require("./routes/product"));
 app.use("/api/user", require("./routes/user"));
-app.use("/api/backup", require("./routes/backups"));
 
 app.use((err, req, res, next) => {
     console.log(err);

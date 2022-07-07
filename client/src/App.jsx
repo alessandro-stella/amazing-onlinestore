@@ -20,12 +20,7 @@ import SellerPage from "./pages/sellerPage";
 import ShopPage from "./pages/shopPage";
 import UserPage from "./pages/userPage";
 
-/* Da rimuovere con il deploy finale */
-if (process.env.NODE_ENV === "development") {
-    axios.defaults.baseURL = "http://localhost:5000/api/";
-} else {
-    axios.defaults.baseURL = "https://amazing-onlinestore.herokuapp.com/api/";
-}
+axios.defaults.baseURL = "https://amazing-onlinestore.herokuapp.com/api/";
 
 function App() {
     const navigate = useNavigate();

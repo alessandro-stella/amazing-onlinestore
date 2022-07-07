@@ -1,10 +1,23 @@
 .loading-data {
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
     flex: 1;
     max-height: 100vh;
 
+    display: -webkit-box;
+
+    display: -ms-flexbox;
+
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
     flex-direction: column;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
 
     font-size: 2em;
@@ -24,52 +37,96 @@
     height: 1em;
     border-radius: 50%;
     background: var(--green);
+    -webkit-animation-timing-function: cubic-bezier(0, 1, 1, 0);
     animation-timing-function: cubic-bezier(0, 1, 1, 0);
 }
 
 .loader div:nth-child(1) {
     left: 0.5em;
+    -webkit-animation: loaderAnimation1 0.6s infinite;
     animation: loaderAnimation1 0.6s infinite;
 }
 
 .loader div:nth-child(2) {
     left: 0.5em;
+    -webkit-animation: loaderAnimation2 0.6s infinite;
     animation: loaderAnimation2 0.6s infinite;
 }
 
 .loader div:nth-child(3) {
     left: 2em;
+    -webkit-animation: loaderAnimation2 0.6s infinite;
     animation: loaderAnimation2 0.6s infinite;
 }
 
 .loader div:nth-child(4) {
     left: 3.5em;
+    -webkit-animation: loaderAnimation3 0.6s infinite;
     animation: loaderAnimation3 0.6s infinite;
+}
+
+@-webkit-keyframes loaderAnimation1 {
+    0% {
+        -webkit-transform: scale(0);
+        transform: scale(0);
+    }
+    100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
 }
 
 @keyframes loaderAnimation1 {
     0% {
+        -webkit-transform: scale(0);
         transform: scale(0);
     }
     100% {
+        -webkit-transform: scale(1);
         transform: scale(1);
+    }
+}
+
+@-webkit-keyframes loaderAnimation3 {
+    0% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+    100% {
+        -webkit-transform: scale(0);
+        transform: scale(0);
     }
 }
 
 @keyframes loaderAnimation3 {
     0% {
+        -webkit-transform: scale(1);
         transform: scale(1);
     }
     100% {
+        -webkit-transform: scale(0);
         transform: scale(0);
+    }
+}
+
+@-webkit-keyframes loaderAnimation2 {
+    0% {
+        -webkit-transform: translate(0, 0);
+        transform: translate(0, 0);
+    }
+    100% {
+        -webkit-transform: translate(1.5em, 0);
+        transform: translate(1.5em, 0);
     }
 }
 
 @keyframes loaderAnimation2 {
     0% {
+        -webkit-transform: translate(0, 0);
         transform: translate(0, 0);
     }
     100% {
+        -webkit-transform: translate(1.5em, 0);
         transform: translate(1.5em, 0);
     }
 }

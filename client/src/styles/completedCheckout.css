@@ -1,8 +1,16 @@
 .completed-order {
     padding: 2em 3em;
+    -webkit-box-shadow: var(--bottom-shadow);
     box-shadow: var(--bottom-shadow);
 
+    display: -webkit-box;
+
+    display: -ms-flexbox;
+
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
     flex-direction: column;
     gap: 1em;
 }
@@ -19,7 +27,12 @@
 }
 
 .completed-order__info:not(.total) {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
     flex-direction: column;
     gap: 0.5em;
 }
@@ -29,7 +42,11 @@
 }
 
 .completed-order__info-section {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
     justify-content: space-between;
 
     color: var(--faded-text);
@@ -39,9 +56,18 @@
     width: min(40em, 100%);
     margin: 0 auto;
 
+    display: -webkit-box;
+
+    display: -ms-flexbox;
+
     display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
+    -ms-flex-wrap: wrap;
     flex-wrap: wrap;
     gap: 0.5em;
 }
@@ -49,7 +75,13 @@
 .completed-order__buttons-container__inner {
     width: 100%;
 
+    display: -webkit-box;
+
+    display: -ms-flexbox;
+
     display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
     gap: 1em;
 }
