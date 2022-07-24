@@ -8,6 +8,33 @@ const History = require("../models/historyModel");
 
 const sendEmail = require("../utils/sendMail");
 
+function formatDate() {
+    const months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    ];
+
+    let now = new Date();
+
+    let day, month, year;
+
+    day = now.getDate();
+    month = months[now.getMonth()];
+    year = now.getFullYear().toString();
+
+    return day + " " + month + " " + year;
+}
+
 router.post("/register", async (req, res, next) => {
     let userData = req.body;
     userData.registeredOn = formatDate();
