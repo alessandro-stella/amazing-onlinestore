@@ -1,10 +1,12 @@
 const express = require("express");
 const path = require("path");
+var cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
 const app = express();
+app.use(cors());
 const port = process.env.PORT || 5000;
 
 mongoose
@@ -36,14 +38,10 @@ app.use((err, req, res, next) => {
     next();
 });
 
-if (process.env.NODE_ENV === "production") {
-    app.use(express.static(path.join(__dirname, "/client/dist")));
-
-    app.get("*", (req, res) => {
-        res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+if (port) {
+    app.listen(port, () => {
+        console.log(`Server running on port ${port}`);
     });
 }
 
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-});
+module.exports = app;

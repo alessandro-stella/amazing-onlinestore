@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const User = require("../models/userModel.js");
-const Cart = require("../models/cartModel");
+const Cart = require("../models/cartModel.js");
 const Product = require("../models/productModel.js");
 
 router.post("/getUserCart", async (req, res, next) => {
@@ -130,7 +130,7 @@ router.post("/removeSinglePurchases", (req, res, next) => {
 
             cart.items = updatedItems;
             cart.markModified("items");
-                    
+
             await cart.save(function (err) {
                 if (err) {
                     return res.status(400).json({

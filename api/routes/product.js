@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 const User = require("../models/userModel.js");
-const Cart = require("../models/cartModel");
-const History = require("../models/historyModel");
+const Cart = require("../models/cartModel.js");
+const History = require("../models/historyModel.js");
 const Product = require("../models/productModel.js");
 
 router.post("/uploadProduct", (req, res, next) => {

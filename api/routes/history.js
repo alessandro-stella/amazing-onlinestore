@@ -2,11 +2,11 @@ const express = require("express");
 const router = express.Router();
 
 const User = require("../models/userModel.js");
-const History = require("../models/historyModel");
-const Product = require("../models/productModel");
-const Cart = require("../models/cartModel");
+const History = require("../models/historyModel.js");
+const Product = require("../models/productModel.js");
+const Cart = require("../models/cartModel.js");
 
-const sendEmail = require("../utils/sendMail");
+const sendEmail = require("../utils/sendMail.js");
 
 const fastShippingDays = 1;
 const normalShippingDays = 3;

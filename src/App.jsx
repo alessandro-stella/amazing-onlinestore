@@ -19,8 +19,9 @@ import ResetPasswordPage from "./pages/resetPasswordPage";
 import SellerPage from "./pages/sellerPage";
 import ShopPage from "./pages/shopPage";
 import UserPage from "./pages/userPage";
+import { url } from "../url";
 
-axios.defaults.baseURL = "https://amazing-onlinestore.herokuapp.com/api/";
+axios.defaults.baseURL = url + "/api";
 
 function App() {
     const navigate = useNavigate();

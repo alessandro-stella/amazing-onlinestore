@@ -3,13 +3,13 @@ const express = require("express");
 const router = express.Router();
 
 const User = require("../models/userModel.js");
-const Cart = require("../models/cartModel");
-const History = require("../models/historyModel");
+const Cart = require("../models/cartModel.js");
+const History = require("../models/historyModel.js");
 const Product = require("../models/productModel.js");
 
-const sendEmail = require("../utils/sendMail");
-const encryptWithAES = require("../utils/encryptId");
-const decryptWithAES = require("../utils/decryptId");
+const sendEmail = require("../utils/sendMail.js");
+const encryptWithAES = require("../utils/encryptId.js");
+const decryptWithAES = require("../utils/decryptId.js");
 
 router.post("/getUserData", (req, res, next) => {
     User.findById(decryptWithAES(req.body.userId))

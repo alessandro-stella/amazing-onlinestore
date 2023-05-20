@@ -3,10 +3,10 @@ const express = require("express");
 const router = express.Router();
 
 const User = require("../models/userModel.js");
-const Cart = require("../models/cartModel");
-const History = require("../models/historyModel");
+const Cart = require("../models/cartModel.js");
+const History = require("../models/historyModel.js");
 
-const sendEmail = require("../utils/sendMail");
+const sendEmail = require("../utils/sendMail.js");
 
 function formatDate() {
     const months = [
